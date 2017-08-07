@@ -72,6 +72,7 @@ model.getGridFilter = function (query, callback) {
     var r = {};
     var where = null;
     var s = {};
+    var obj = {};
 
     console.log(query);
 /*    if (query) {
@@ -86,7 +87,7 @@ model.getGridFilter = function (query, callback) {
     return new Promise(function (resolve, reject) {
         model.findAll({
             raw: true,
-            attributes: ['username', 'fullname','email','roleId','status']
+            attributes: ['username', 'fullname','email','roleId','status',['id','_id']]
         }).then(function (users) {
 
             if(!users){
@@ -95,8 +96,12 @@ model.getGridFilter = function (query, callback) {
                 return callback(err);
             }
 
-            resolve(users);
-            return callback(null,users);
+            var obj = {}
+            obj.data = users;
+            obj.itemsCount  = 13;
+
+            resolve(obj);
+            return callback(null,obj);
         });
 
     });
