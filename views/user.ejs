@@ -19,6 +19,12 @@
 <script>
     // List of countries for the select field
 
+    var roles = [
+        {Name: "", Id: 0},
+        {Name: "Admin", Id: 1},
+        {Name: "User", Id: 2},
+        {Name: "Client", Id: 3}
+    ];
 
     $("#jsGrid").jsGrid({
         // height: "100%",
@@ -39,7 +45,7 @@
                 return $.ajax({
                     datatype: 'json',
                     type: "GET",
-                    url: "/banks",
+                    url: "/users",
                     data: filter
                 });
             },
@@ -69,11 +75,11 @@
             }
         },
         fields: [
-            {name: "swiftCode", type: "text", width: 150},
-            {name: "bankCode", type: "text", width: 150},
-            {name: "bankName", type: "text", width: 200},
-            {name: "branchName", type: "text", width: 150},
-            {name: "city", type: "text", width: 150},
+            {name: "username", type: "text", width: 150},
+            {name: "fullname", type: "number", width: 50, filtering: false},
+            {name: "email", type: "text", width: 200},
+            {name: "roleId", type: "select", items: roles, valueField: "Id", textField: "Name"},
+            {name: "status", type: "checkbox", title: "Is Active", sorting: false},
             {type: "control"}
         ]
     });

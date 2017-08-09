@@ -8,50 +8,64 @@ var attributeData = {
         primaryKey: true,
         autoIncrement: true
     },
-    username: {
-        type: Sequelize.STRING(255),
-        allowNull: false,
-        unique: true
-    },
-    password: {
+    swiftCode: {
         type: Sequelize.STRING(255),
         allowNull: false
     },
-    fullname: {
+    bankCode: {
+        type: Sequelize.STRING(20),
+        allowNull: false
+    },
+    bankName: {
         type: Sequelize.STRING(255),
         allowNull: false
     },
-    email: {
+    branchCode: {
+        type: Sequelize.STRING(20),
+        allowNull: false
+    },
+    branchName: {
         type: Sequelize.STRING(255),
         allowNull: false
     },
-    photo: {
+    city: {
         type: Sequelize.STRING(255),
-        allowNull: true
+        allowNull: false
     },
-    roleId: {
-        type: Sequelize.INTEGER(1),
-        allowNull: true,
-        defaultValue: '3'
+    subBranchCode: {
+        type: Sequelize.STRING(20),
+        allowNull: false
     },
-    status: {
-        type: Sequelize.INTEGER(1),
-        allowNull: true,
-        defaultValue: '0'
+    subBranchName: {
+        type: Sequelize.STRING(255),
+        allowNull: false
     },
-    createdAt: {
+    remark: {
+        type: Sequelize.STRING(255),
+        allowNull: false
+    },
+    createDate: {
         type: Sequelize.DATE,
         allowNull: false
     },
-    updatedAt: {
+    createBy: {
+        type: Sequelize.INTEGER(11),
+        allowNull: false
+    },
+    updateDate: {
         type: Sequelize.TIME,
         allowNull: false,
         defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+    },
+    updateBy: {
+        type: Sequelize.INTEGER(11),
+        allowNull: false
     }
 }
 
+
 //Model singleton
-var model = sequelize.define('user', attributeData, {
+var model = sequelize.define('bank', attributeData, {
     timestamps: false
 });
 
@@ -80,7 +94,6 @@ model.getGridFilter = function (query, callback) {
     var s = {};
 
 
-
     console.log(query);
 
     var limit = parseInt(query.pageSize || 20);
@@ -92,30 +105,18 @@ model.getGridFilter = function (query, callback) {
 
     var o = {};
     o.raw = true;
-    o.attributes = ['username', 'fullname', 'email', 'roleId', 'status', ['id', '_id']];
+    o.attributes = ['swiftCode', 'bankCode', 'bankName', 'branchName', 'city', 'id'];
     o.limit = limit;
-    o.offset =offset;
-    o.$sort ={id: 1}
+    o.offset = offset;
+    o.$sort = {id: 1}
 
     if (query) {
         for (var q in query) {
             var a = keys.indexOf(q);
             if (a >= 0) {
                 if (query[q] != "") {
-                    if (q == 'roleId') {
-                        if (query[q] > 0) {
-                            s[q] = query[q];
-                        }
-                    } else if (q == 'status') {
-                        if (query[q] == 'false') {
-                            s[q] = 0;
-                        } else {
-                            s[q] = 1;
-                        }
-                    } else {
-                        s[q] = {
-                            $like: '%' + query[q] + '%'
-                        }
+                    s[q] = {
+                        $like: '%' + query[q] + '%'
                     }
                 }
             }
