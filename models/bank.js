@@ -1,3 +1,6 @@
+/*
+ sequelize-auto -o "./models" -d chat -h localhost -u root -p 3306 -e mysql -t bank
+ */
 const Sequelize = require('sequelize');
 var sequelize = require('./config.js');
 
