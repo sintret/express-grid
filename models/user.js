@@ -56,56 +56,73 @@ var model = sequelize.define('user', attributeData, {
 });
 
 var obj = {};
+var keys = [];
 for (var property in attributeData) {
     if (attributeData.hasOwnProperty(property)) {
-        // do stuff
         obj.property = null;
+        keys.push(property);
     }
 }
 
 //get attribute data
 model.attributeData = obj;
+model.keys = keys;
+
+//filter for jsgrid
 model.getGridFilter = function (query, callback) {
 
-    callback = callback || function () {}
+    callback = callback || function () {
+        }
 
     var r = {};
     var where = null;
     var s = {};
-    var obj = {};
+    var o = {};
+    o.raw = true;
+    o.attributes = ['username', 'fullname', 'email', 'roleId', 'status', ['id', '_id']];
 
     console.log(query);
-/*    if (query) {
-        for (var key in query) {
-            if(query[key]){
-                var t =
-                s.key = query.key;
+
+    if (query) {
+        for (var q in query) {
+            var a = keys.indexOf(q);
+            if (a >= 0) {
+                if (query[q] != "") {
+                    if (q == 'roleId') {
+                        if (query[q] > 0) {
+                            s[q] = query[q];
+                        }
+                    } else if (q == 'status') {
+                        if (query[q] == 'false') {
+                            s[q] = 0;
+                        } else {
+                            s[q] = 1;
+                        }
+                    } else {
+                        s[q] = {
+                            $like:'%'+query[q]+'%'
+                        }
+                    }
+                }
             }
         }
-    }*/
+        if (s) {
+            o.where = s;
+        }
+    }
+
+    console.log(o);
 
     return new Promise(function (resolve, reject) {
-        model.findAll({
-            raw: true,
-            attributes: ['username', 'fullname','email','roleId','status',['id','_id']]
-        }).then(function (users) {
+        model.findAndCountAll(o).then(function (results) {
+            
+            var x = {}
+            x.data = results.rows;
+            x.itemsCount = results.count;
 
-            if(!users){
-                var err = {error:true,msg:'error'}
-                reject(err);
-                return callback(err);
-            }
-
-            var obj = {}
-            obj.data = users;
-            obj.itemsCount  = 13;
-
-            resolve(obj);
-            return callback(null,obj);
+            resolve(x);
+            return callback(null, x);
         });
-
     });
-
-
 }
 module.exports = model;
