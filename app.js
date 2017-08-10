@@ -27,6 +27,7 @@ app.use('/bower_components', express.static(path.join(__dirname, 'bower_componen
 app.use('/', index);
 app.use('/users', users);
 app.use('/banks', banks);
+app.use('/generator', require('./routes/generator'));
 
 
 // catch 404 and forward to error handler
