@@ -74,24 +74,12 @@ model.keys = keys;
 //filter for jsgrid
 model.getGridFilter = function (query, callback) {
 
-    callback = callback || function () {
-        }
-
-
-    var r = {};
-    var where = null;
+    callback = callback || function () {}
     var s = {};
-
-
-
-    console.log(query);
 
     var limit = parseInt(query.pageSize || 20);
     var pageIndex = parseInt(query.pageIndex) || 1;
     var offset = limit * (pageIndex - 1);
-    // var page = req.query.page || 1;
-    // var pages = Math.ceil(data.count / limit);
-
 
     var o = {};
     o.raw = true;
