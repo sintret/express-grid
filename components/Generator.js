@@ -49,6 +49,30 @@ var Generator = function (arr, table) {
         return out;
     }
 
+    this.outputRoutes = function () {
+        if (arr.length == 0) {
+            return '';
+        }
+
+        var out = '';
+        out += "var express = require('express');" + this.newLine;
+        out += "var router = express.Router();" + this.newLine;
+        out += "var " + this.capitalizeFirstLetter(table) + " = require('./../models/" + table + ".js');" + this.newLine + this.newLine
+        out += "/* GET users listing. */" + this.newLine;
+        out += "router.get('/list', function (req, res, next) {" + this.newLine;
+        out += this.tab + this.capitalizeFirstLetter(table) + ".getGridFilter(req.query).then(function (items) {" + this.newLine;
+        out += this.tab + this.tab + "res.json(items);" + this.newLine;
+        out += this.tab + "});" + this.newLine;
+        out += "});" + this.newLine;
+        out += "module.exports = router;" + this.newLine;
+
+        return out;
+    }
+
+    this.outputViewIndex = function () {
+
+    }
+
     this.attributeData = function () {
         var out = '';
         out += 'var attributeData = {';
@@ -67,38 +91,39 @@ var Generator = function (arr, table) {
         var out = '';
         out += 'model.getGridFilter = function (query, callback) {';
         out += this.newLine;
-        out += this.tab+'callback = callback || function () {}' + this.newLine;
-        out += this.tab+'var s = {};' + this.newLine;
-        out += this.tab+'var limit = parseInt(query.pageSize || 20);' + this.newLine;
-        out += this.tab+'var pageIndex = parseInt(query.pageIndex) || 1;' + this.newLine;
-        out += this.tab+'var offset = limit * (pageIndex - 1);' + this.newLine+ this.newLine;
-        out += this.tab+'var o = {};' + this.newLine;
-        out += this.tab+'o.raw = true;' + this.newLine;
-        out += this.tab+'o.attributes = model.keys ;' + this.newLine;
-        out += this.tab+'o.limit = limit;' + this.newLine;
-        out += this.tab+'o.offset =offset;' + this.newLine+ this.newLine;
-        out += this.tab+'if (query) {' + this.newLine;
+        out += this.tab + 'callback = callback || function () {}' + this.newLine;
+        out += this.tab + 'var s = {};' + this.newLine;
+        out += this.tab + 'var limit = parseInt(query.pageSize || 20);' + this.newLine;
+        out += this.tab + 'var pageIndex = parseInt(query.pageIndex) || 1;' + this.newLine;
+        out += this.tab + 'var offset = limit * (pageIndex - 1);' + this.newLine + this.newLine;
+        out += this.tab + 'var keys = model.keys;' + this.newLine;
+        out += this.tab + 'var o = {};' + this.newLine;
+        out += this.tab + 'o.raw = true;' + this.newLine;
+        out += this.tab + 'o.attributes = keys ;' + this.newLine;
+        out += this.tab + 'o.limit = limit;' + this.newLine;
+        out += this.tab + 'o.offset =offset;' + this.newLine + this.newLine;
+        out += this.tab + 'if (query) {' + this.newLine;
         out += this.tab + this.tab + 'for (var q in query) {' + this.newLine;
-        out += this.tab + this.tab + this.tab +'var a = keys.indexOf(q);' + this.newLine;
-        out += this.tab + this.tab + this.tab +'if (a >= 0) {' + this.newLine;
-        out += this.tab + this.tab + this.tab +this.tab +'if (query[q] != "") {' + this.newLine;
-        out += this.tab + this.tab + this.tab +this.tab +this.tab +"s[q] = {$like: '%' + query[q] + '%'}" + this.newLine;
-        out += this.tab + this.tab + this.tab +this.tab +'}' + this.newLine;
-        out += this.tab + this.tab + this.tab +'}' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'var a = keys.indexOf(q);' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'if (a >= 0) {' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + 'if (query[q] != "") {' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + "s[q] = {$like: '%' + query[q] + '%'}" + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + '}' + this.newLine;
+        out += this.tab + this.tab + this.tab + '}' + this.newLine;
         out += this.tab + this.tab + '}' + this.newLine;
-        out +=  this.tab + this.tab +'if (s) {o.where = s;}' + this.newLine;
-        out +=  this.tab +'}' + this.newLine+ this.newLine;
+        out += this.tab + this.tab + 'if (s) {o.where = s;}' + this.newLine;
+        out += this.tab + '}' + this.newLine + this.newLine;
 
-        out += this.tab +'return new Promise(function (resolve, reject) {' + this.newLine;
-        out += this.tab +this.tab +'model.findAndCountAll(o).then(function (results) {' + this.newLine;
-        out += this.tab +this.tab +this.tab +'var x = {}' + this.newLine;
-        out += this.tab +this.tab +this.tab +'x.data = results.rows;' + this.newLine;
-        out += this.tab +this.tab +this.tab +'x.itemsCount = results.count;' + this.newLine;
-        out += this.tab +this.tab +this.tab +'resolve(x);' + this.newLine;
-        out += this.tab +this.tab +this.tab +'return callback(null, x);' + this.newLine;
-        out += this.tab +this.tab+'});' + this.newLine;
-        out += this.tab +'});' + this.newLine;
-        out +='}' + this.newLine;
+        out += this.tab + 'return new Promise(function (resolve, reject) {' + this.newLine;
+        out += this.tab + this.tab + 'model.findAndCountAll(o).then(function (results) {' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'var x = {}' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'x.data = results.rows;' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'x.itemsCount = results.count;' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'resolve(x);' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'return callback(null, x);' + this.newLine;
+        out += this.tab + this.tab + '});' + this.newLine;
+        out += this.tab + '});' + this.newLine;
+        out += '}' + this.newLine;
 
         return out;
     }
@@ -199,6 +224,10 @@ var Generator = function (arr, table) {
         }
 
         return r;
+    }
+
+    this.capitalizeFirstLetter = function (string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
 }

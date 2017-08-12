@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+//get absolute path
+global.appRoot = path.resolve(__dirname);
 
 var app = express();
 
@@ -20,14 +22,25 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components', express.static(path.join(__dirname, 'bower_components')));
 
+app.use(function (req, res, next) {
+    // if there's a flash message in the session request, make it available in the response, then delete it
+    res.locals.renderBody = "";
+    res.locals.renderEnd = "";
+    res.locals.data = "";
+    res.locals.title = "my app";
+
+    next();
+});
+
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/banks', require('./routes/banks'));
 app.use('/generator', require('./routes/generator'));
-/*
-app.use('/php', require('./routes/php'));
-*/
+app.use('/company', require('./routes/company'));
 
+/*
+ app.use('/php', require('./routes/php'));
+ */
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

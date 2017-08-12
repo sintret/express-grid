@@ -22,14 +22,32 @@ router.post('/', function (req, res, next) {
         console.log(JSON.stringify(rows));
 
         var fs = require('fs');
-        var p = process.env.PWD + "./../models/"+table+".js";
+        var fileModel = appRoot+ "/models/"+table+".js";
         var g = new Generator(rows,table);
-        fs.writeFile(p, g.outputModel(), function (err) {
+        fs.writeFile(fileModel, g.outputModel(), function (err) {
             if (err) {
                 return console.log(g.outputModel());
             }
 
-            console.log("The file was saved!");
+            console.log("The file models was saved!");
+        });
+
+        var fileRoutes = appRoot+ "/routes/"+ table +".js";
+        fs.writeFile(fileRoutes, g.outputRoutes(), function (err) {
+            if (err) {
+                return console.log(g.outputRoutes());
+            }
+
+            console.log("The file routes was saved!");
+        });
+
+        var fileViewsIndex = appRoot+ "/views/"+ table +"/index.ejs";
+        fs.writeFile(fileViewsIndex, g.outputRoutes(), function (err) {
+            if (err) {
+                return console.log(g.outputRoutes());
+            }
+
+            console.log("The file routes was saved!");
         });
 
         res.json(rows);

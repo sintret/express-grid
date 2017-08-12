@@ -218,3 +218,42 @@ model.attributeData = {
     id: null
 };
 model.keys = ["code", "codes", "alias", "employeeCategoryId", "typeTaxId", "workDays", "name", "npwp", "address", "kota", "description", "jamsostekNo", "telephone", "fax", "virtual_account", "contactPerson", "officerName", "officerId", "position", "createDate", "formulaId", "group", "groupId", "contractNo", "startContract", "endContract", "kodeAkunPajak", "kodeSetoran", "uraianPembayaran", "jointDate", "tenagaKerja", "upah", "bpjs", "online", "logo", "onlineDate", "createBy", "updateDate", "updateBy", "id"];
+
+model.getGridFilter = function (query, callback) {
+    callback = callback || function () {
+        }
+    var s = {};
+    var limit = parseInt(query.pageSize || 20);
+    var pageIndex = parseInt(query.pageIndex) || 1;
+    var offset = limit * (pageIndex - 1);
+    var keys = model.keys;
+
+    var o = {};
+    o.raw = true;
+    o.attributes = keys;
+    o.limit = limit;
+    o.offset = offset;
+
+    if (query) {
+        for (var q in query) {
+            var a = keys.indexOf(q);
+            if (a >= 0) {
+                if (query[q] != "") {
+                    s[q] = {$like: '%' + query[q] + '%'}
+                }
+            }
+        }
+        //if (s) {o.where = s;}
+    }
+
+    return new Promise(function (resolve, reject) {
+        model.findAndCountAll(o).then(function (results) {
+            var x = {}
+            x.data = results.rows;
+            x.itemsCount = results.count;
+            resolve(x);
+            return callback(null, x);
+        });
+    });
+}
+module.exports = model;

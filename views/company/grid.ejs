@@ -1,0 +1,83 @@
+<script>
+    var o = ["code", "codes", "alias", "employeeCategoryId", "typeTaxId", "workDays", "name", "npwp", "address", "kota", "description", "jamsostekNo", "telephone", "fax", "virtual_account", "contactPerson", "officerName", "officerId", "position", "createDate", "formulaId", "group", "groupId", "contractNo", "startContract", "endContract", "kodeAkunPajak", "kodeSetoran", "uraianPembayaran", "jointDate", "tenagaKerja", "upah", "bpjs", "online", "logo", "onlineDate", "createBy", "updateDate", "updateBy", "id"];
+    var fields = [];
+    for (var i = 0; i < o.length; i++) {
+        if (o[i] != "id") {
+            var f = {
+                name: o[i],
+                type: "text",
+                width: 90
+            }
+            fields.push(f);
+        }
+    }
+
+    var d = { type: "control", width: 100, editButton: false, deleteButton: false,
+        itemTemplate: function(value, item) {
+            var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+            var $customEditButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class='glyphicon glyphicon-pencil'></span>")
+                    .click(function(e) {
+                        location.href='/company/update/'+item.id
+                        e.stopPropagation();
+                    });
+
+            var $customDeleteButton = $("<button>").attr({class: "btn btn-danger btn-xs"}).html("<span class='glyphicon glyphicon-trash'></span>")
+                    .click(function(e) {
+                        alert("Title: " + item.title);
+                        e.stopPropagation();
+                    });
+
+            return $("<div>").append($customEditButton).append("   ").append($customDeleteButton);
+            //return $result.add($customButton);
+        },
+    }
+
+    fields.push(d);
+
+    // List of countries for the select field
+    $("#jsGrid").jsGrid({
+        // height: "100%",
+        width: "100%",
+        filtering: false,
+        inserting: false,
+        editing: true,
+        sorting: false,
+        autoload: true,
+        paging: true,
+        pageLoading: true,
+        css: "kv-grid-table table table-bordered table-striped kv-table-wrap",
+        // pageSize: 10,
+        //  pageButtonCount: 5,
+        deleteConfirm: "Do you really want to delete client?",
+        controller: {
+            loadData: function (filter) {
+                // GET to retrieve client list
+                return $.ajax({
+                    datatype: 'json',
+                    type: "GET",
+                    url: "/company/list",
+                    data: filter
+                });
+            },
+            updateItem: function (item) {
+                // PUT to update the client
+                return $.ajax({
+                    type: "PUT",
+                    url: "/users",
+                    data: item
+                });
+            },
+            deleteItem: function (item) {
+                // DELETE to remove client
+                return $.ajax({
+                    type: "DELETE",
+                    url: "/users",
+                    data: item
+                });
+            }
+        },
+        fields: fields
+    });
+
+</script>

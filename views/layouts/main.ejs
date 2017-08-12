@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel='stylesheet' href='/css/style.css'/>
+    <link rel='stylesheet' href='/bower_components/jsgrid/dist/jsgrid.min.css'/>
+    <link rel='stylesheet' href='/bower_components/jsgrid/dist/jsgrid-theme.min.css'/>
+    <link rel='stylesheet' href='/bower_components/components-font-awesome/css/font-awesome.min.css'/>
+    <link rel='stylesheet' href='/css/grid.css'/>
+
+</head>
+<body>
+<% if(renderBody!=""){%>
+<%- include("../"+renderBody) %>
+<%}%>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/bower_components/jsgrid/dist/jsgrid.min.js"></script>
+<% if(renderEnd!=""){%>
+<%- include("../"+renderEnd) %>
+<%}%>
+</body>
+</html>
