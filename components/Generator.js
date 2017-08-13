@@ -1,5 +1,8 @@
 'use strict';
 
+var fs = require('fs');
+var mkdirp = require('mkdirp');
+
 String.prototype.replaceArray = function (find, replace) {
     var replaceString = this;
     var regex;
@@ -10,15 +13,15 @@ String.prototype.replaceArray = function (find, replace) {
     return replaceString;
 };
 
-var Generator = function (arr, table) {
+var Generator = function (arr, table, dirRoot) {
     arr = arr || [];
     table = table || "";
+    dirRoot = dirRoot || "";
 
     this.tab = '\t';
     this.newLine = '\r\n';
     this.spaces = '   ';
     this.fields = arr.length > 0 ? arr[0] : [];
-
 
     this.outputModel = function () {
         if (arr.length == 0) {
@@ -58,7 +61,16 @@ var Generator = function (arr, table) {
         out += "var express = require('express');" + this.newLine;
         out += "var router = express.Router();" + this.newLine;
         out += "var " + this.capitalizeFirstLetter(table) + " = require('./../models/" + table + ".js');" + this.newLine + this.newLine
-        out += "/* GET users listing. */" + this.newLine;
+        out += "/* GET " + table + " listing. */" + this.newLine;
+
+        out += "router.get('/', function (req, res, next) {" + this.newLine;
+        out += this.tab + 'res.render("layouts/main", {' + this.newLine;
+        out += this.tab + this.tab + 'renderBody: "' + table + '/index.ejs",' + this.newLine;
+        out += this.tab + this.tab + 'renderEnd: "'+table+'/grid.ejs",' + this.newLine;
+        out += this.tab + this.tab + 'data: {table:"' + table + '"}' + this.newLine;
+        out += this.tab + '});' + this.newLine;
+        out += '});' + this.newLine;
+
         out += "router.get('/list', function (req, res, next) {" + this.newLine;
         out += this.tab + this.capitalizeFirstLetter(table) + ".getGridFilter(req.query).then(function (items) {" + this.newLine;
         out += this.tab + this.tab + "res.json(items);" + this.newLine;
@@ -69,8 +81,94 @@ var Generator = function (arr, table) {
         return out;
     }
 
-    this.outputViewIndex = function () {
+    this.outputViewsIndex = function () {
 
+        var out = '';
+        out += '<div class="page-header">' + this.newLine;
+        out += this.tab + "<h1><%= title %></h1>" + this.newLine;
+        out += "</div>" + this.newLine + this.newLine;
+        out += '<div class="panel panel-info">' + this.newLine;
+        out += this.tab + '<div class="panel-heading">' + this.newLine;
+        out += this.tab + this.tab + '<div class="pull-right">' + this.newLine;
+        out += this.tab + this.tab + this.tab + '<div class="summary">Showing <b>1-100</b> of <b>21,387</b> items.</div>' + this.newLine;
+        out += this.tab + this.tab + '</div>' + this.newLine;
+        out += this.tab + this.tab + '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> ' + this.capitalizeFirstLetter(table) + ' Grid</h3>' + this.newLine;
+        out += this.tab + this.tab + '<div class="clearfix"></div>' + this.newLine;
+        out += this.tab +'</div>' + this.newLine;
+        out += this.tab + '<div class="kv-panel-before">' + this.newLine;
+        out += this.tab + this.tab + '<div class="pull-right">' + this.newLine;
+        out += this.tab + this.tab + this.tab + '<div class="btn-toolbar kv-grid-toolbar" role="toolbar">' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + '<div class="btn-group">' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + '<a type="button" id="create_btn" class="btn btn-success"href="/' + table + '/create" title="Add Data"><i class="glyphicon glyphicon-plus"></i></a>' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + '<a type="button" class="btn btn-warning" href="/' + table + '/parsing" title="Import Excel"><i class="fa fa-file-excel-o"></i></a>' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + '<button type="button" id="backupExcel" class="btn btn-default" title="Excel Backup"><i class="fa fa-download"></i></button>' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + '<a class="btn btn-default" href="/' + table + '" title="Refresh Grid" ><i class="glyphicon glyphicon-repeat"></i></a></div>' + this.newLine;
+        out += this.tab + this.tab + this.tab + '</div>' + this.newLine;
+        out += this.tab + this.tab + '</div>' + this.newLine;
+        out += this.tab + this.tab + '<div style="padding-top: 7px;"><em>* Exports &amp; Imports Excel Format</em></div>' + this.newLine;
+        out += this.tab + this.tab + '<div class="clearfix"></div>' + this.newLine;
+        out += this.tab + '</div>' + this.newLine;
+        out += this.tab + '<div id="jsGrid" class="table-responsive kv-grid-container"></div>' + this.newLine;
+        out += '</div>' + this.newLine;
+
+        return out;
+    }
+
+    this.outputViewsGrid = function () {
+
+        var out = '<script>' + this.newLine;
+        out += this.tab + '$("#jsGrid").jsGrid({' + this.newLine;
+        out += this.tab + this.tab + 'width: "100%",' + this.newLine;
+        out += this.tab + this.tab + 'filtering: true,' + this.newLine;
+        out += this.tab + this.tab + 'inserting: false,' + this.newLine;
+        out += this.tab + this.tab + 'editing: true,' + this.newLine;
+        out += this.tab + this.tab + 'sorting: false,' + this.newLine;
+        out += this.tab + this.tab + 'autoload: true,' + this.newLine;
+        out += this.tab + this.tab + 'paging: true,' + this.newLine;
+        out += this.tab + this.tab + 'pageLoading: true,' + this.newLine;
+        out += this.tab + this.tab + 'css: "kv-grid-table table table-bordered table-striped kv-table-wrap",' + this.newLine;
+        out += this.tab + this.tab + 'pageSize: 20,' + this.newLine;
+        out += this.tab + this.tab + 'pageButtonCount: 10,' + this.newLine;
+        out += this.tab + this.tab + 'deleteConfirm: "Do you really want to delete client?",' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'controller: {' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + 'loadData: function (filter) {' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + 'return $.ajax({' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + 'datatype: "json",' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + 'type: "GET",' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + 'url: "/' + table + '/list",' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + 'data: filter,' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + 'success: function (html) {' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + 'var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = "Showing <b>"; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + '}' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + '});' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + '},' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + 'updateItem: function (item) {return $.ajax({type: "PUT",url: "/' + table + '",data: item});},' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + 'deleteItem: function (item) {return $.ajax({type: "DELETE",url: "/' + table + '",data: item});}' + this.newLine;
+        out += this.tab + this.tab + this.tab + '},' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'fields: [' + this.newLine;
+
+        var keys = this.keys();
+        for (var i = 0; i < keys.length; i++) {
+            if(keys[i] != "id")
+            out += this.tab + this.tab + this.tab + this.tab + '{name:"' + keys[i] + '", type: "text", width: 90},' + this.newLine;
+        }
+        out += this.tab + this.tab + this.tab + this.tab + '{type: "control", width: 100, editButton: false,' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + 'itemTemplate: function (value, item) {' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + 'var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + 'var $customViewButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class=\'glyphicon glyphicon-eye-open\'></span>").click(function (e) {location.href = "/' + table + '/view/" + item.id; e.stopPropagation();});' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + 'var $customEditButton = $("<button>").attr({class: "btn btn-success btn-xs"}).html("<span class=\'glyphicon glyphicon-pencil\'></span>").click(function (e) {location.href = "/' + table + '/update/" + item.id; e.stopPropagation();});' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + 'return $("<div>").append($customViewButton).append("   ").append($customEditButton).append("    ");' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + '}' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + '}' + this.newLine;
+
+
+        out += this.tab + this.tab + this.tab + ']' + this.newLine;
+        out += this.tab + this.tab + '});' + this.newLine;
+
+
+        out += '</script>';
+
+        return out;
     }
 
     this.attributeData = function () {
@@ -165,6 +263,8 @@ var Generator = function (arr, table) {
 
     this.getType = function (type) {
         type = type.toLowerCase();
+        type = type.replace("unsigned","");
+        type = type.trim();
         var s = 'bigint';
         var tiny = 'tinyint';
         var date = 'date';
@@ -175,8 +275,8 @@ var Generator = function (arr, table) {
         } else if (type.indexOf(tiny) >= 0) {
             r = type.replace(tiny, "INTEGER");
         } else {
-            var find = ["int", "varchar", "char", "timestamp", "datetime", "date"];
-            var replace = ["INTEGER", "STRING", "STRING", "DATE", "DATE", "DATEONLY"];
+            var find = ["int", "varchar", "char", "timestamp", "datetime", "date", "mediumtext"];
+            var replace = ["INTEGER", "STRING", "STRING", "DATE", "DATE", "DATEONLY", "TEXT"];
             r = type.replaceArray(find, replace);
         }
 
@@ -228,6 +328,29 @@ var Generator = function (arr, table) {
 
     this.capitalizeFirstLetter = function (string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    this.createDir = function (dir, callback) {
+        callback = callback || function () {
+            }
+
+        return new Promise(function (resolve, reject) {
+            fs.stat(dir, function (err, stats) {
+                if (err) {
+                    // Directory doesn't exist or something.
+                    console.log('Folder doesn\'t exist, so I made the folder ');
+                    fs.mkdir(dir);
+
+                    resolve(dir);
+                    return callback(null, dir);
+                }
+
+
+                resolve(dir);
+                return callback(null, dir);
+            });
+        });
+
     }
 
 }

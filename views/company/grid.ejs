@@ -12,32 +12,20 @@
         }
     }
 
-    var d = { type: "control", width: 100, editButton: false, deleteButton: false,
-        itemTemplate: function(value, item) {
+    var control = {
+        type: "control", width: 100, editButton: false,
+        itemTemplate: function (value, item) {
             var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
-
-            var $customEditButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class='glyphicon glyphicon-pencil'></span>")
-                    .click(function(e) {
-                        location.href='/company/update/'+item.id
-                        e.stopPropagation();
-                    });
-
-            var $customDeleteButton = $("<button>").attr({class: "btn btn-danger btn-xs"}).html("<span class='glyphicon glyphicon-trash'></span>")
-                    .click(function(e) {
-                        alert("Title: " + item.title);
-                        e.stopPropagation();
-                    });
-
-            return $("<div>").append($customEditButton).append("   ").append($customDeleteButton);
-            //return $result.add($customButton);
-        },
+            var $customViewButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class='glyphicon glyphicon-eye'></span>").click(function (e) {location.href = "/company/view/" + item.id; e.stopPropagation();});
+            var $customEditButton = $("<button>").attr({class: "btn btn-success btn-xs"}).html("<span class='glyphicon glyphicon-pencil'></span>").click(function (e) {location.href = '/company/update/' + item.id; e.stopPropagation();});
+            return $("<div>").prepend($customViewButton).prepend("   ").append($customEditButton).prepend("    ");
+        }
     }
 
-    fields.push(d);
+    fields.push(control);
 
     // List of countries for the select field
     $("#jsGrid").jsGrid({
-        // height: "100%",
         width: "100%",
         filtering: false,
         inserting: false,
@@ -47,35 +35,23 @@
         paging: true,
         pageLoading: true,
         css: "kv-grid-table table table-bordered table-striped kv-table-wrap",
-        // pageSize: 10,
-        //  pageButtonCount: 5,
+        pageSize: 20,
+        pageButtonCount: 10,
         deleteConfirm: "Do you really want to delete client?",
         controller: {
             loadData: function (filter) {
-                // GET to retrieve client list
                 return $.ajax({
                     datatype: 'json',
                     type: "GET",
                     url: "/company/list",
-                    data: filter
+                    data: filter,
+                    success: function (html) {
+                        var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = 'Showing <b>'; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");
+                    }
                 });
             },
-            updateItem: function (item) {
-                // PUT to update the client
-                return $.ajax({
-                    type: "PUT",
-                    url: "/users",
-                    data: item
-                });
-            },
-            deleteItem: function (item) {
-                // DELETE to remove client
-                return $.ajax({
-                    type: "DELETE",
-                    url: "/users",
-                    data: item
-                });
-            }
+            updateItem: function (item) {return $.ajax({type: "PUT",url: "/users",data: item});},
+            deleteItem: function (item) {return $.ajax({type: "DELETE",url: "/users",data: item});}
         },
         fields: fields
     });

@@ -1,0 +1,27 @@
+<div class="page-header">
+	<h1><%= title %></h1>
+</div>
+
+<div class="panel panel-info">
+	<div class="panel-heading">
+		<div class="pull-right">
+			<div class="summary">Showing <b>1-100</b> of <b>21,387</b> items.</div>
+		</div>
+		<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> Factories Grid</h3>
+		<div class="clearfix"></div>
+	</div>
+	<div class="kv-panel-before">
+		<div class="pull-right">
+			<div class="btn-toolbar kv-grid-toolbar" role="toolbar">
+				<div class="btn-group">
+				<a type="button" id="create_btn" class="btn btn-success"href="/factories/create" title="Add Data"><i class="glyphicon glyphicon-plus"></i></a>
+				<a type="button" class="btn btn-warning" href="/factories/parsing" title="Import Excel"><i class="fa fa-file-excel-o"></i></a>
+				<button type="button" id="backupExcel" class="btn btn-default" title="Excel Backup"><i class="fa fa-download"></i></button>
+				<a class="btn btn-default" href="/factories" title="Refresh Grid" ><i class="glyphicon glyphicon-repeat"></i></a></div>
+			</div>
+		</div>
+		<div style="padding-top: 7px;"><em>* Exports &amp; Imports Excel Format</em></div>
+		<div class="clearfix"></div>
+	</div>
+	<div id="jsGrid" class="table-responsive kv-grid-container"></div>
+</div>

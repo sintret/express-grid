@@ -1,0 +1,83 @@
+<script>
+	$("#jsGrid").jsGrid({
+		width: "100%",
+		filtering: false,
+		inserting: false,
+		editing: true,
+		sorting: false,
+		autoload: true,
+		paging: true,
+		pageLoading: true,
+		css: "kv-grid-table table table-bordered table-striped kv-table-wrap",
+		pageSize: 20,
+		pageButtonCount: 10,
+		deleteConfirm: "Do you really want to delete client?",
+			controller: {
+				loadData: function (filter) {
+					return $.ajax({
+						datatype: "json",
+						type: "GET",
+						url: "/member/list",
+						data: filter,
+						success: function (html) {
+							var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = "Showing <b>"; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");
+						}
+					});
+				},
+				updateItem: function (item) {return $.ajax({type: "PUT",url: "/member",data: item});},
+				deleteItem: function (item) {return $.ajax({type: "DELETE",url: "/member",data: item});}
+			},
+			fields: [
+				{name:"Fullname", type: "text", width: 90},
+				{name:"ProvinsiId", type: "text", width: 90},
+				{name:"KabupatenId", type: "text", width: 90},
+				{name:"KecamatanId", type: "text", width: 90},
+				{name:"Kodepos", type: "text", width: 90},
+				{name:"Address1", type: "text", width: 90},
+				{name:"Address2", type: "text", width: 90},
+				{name:"Phone1", type: "text", width: 90},
+				{name:"Phone2", type: "text", width: 90},
+				{name:"Email", type: "text", width: 90},
+				{name:"Remark", type: "text", width: 90},
+				{name:"Checked", type: "text", width: 90},
+				{name:"Billing_fullname", type: "text", width: 90},
+				{name:"Billing_provinsiId", type: "text", width: 90},
+				{name:"Billing_kabupatenId", type: "text", width: 90},
+				{name:"Billing_kecamatanId", type: "text", width: 90},
+				{name:"Billing_kodepos", type: "text", width: 90},
+				{name:"Billing_address1", type: "text", width: 90},
+				{name:"Billing_address2", type: "text", width: 90},
+				{name:"Billing_phone1", type: "text", width: 90},
+				{name:"Billing_phone2", type: "text", width: 90},
+				{name:"Billing_email", type: "text", width: 90},
+				{name:"Billing_remark", type: "text", width: 90},
+				{name:"Billing_checked", type: "text", width: 90},
+				{name:"Shipping_fullname", type: "text", width: 90},
+				{name:"Shipping_provinsiId", type: "text", width: 90},
+				{name:"Shipping_kabupatenId", type: "text", width: 90},
+				{name:"Shipping_kecamatanId", type: "text", width: 90},
+				{name:"Shipping_kodepos", type: "text", width: 90},
+				{name:"Shipping_address1", type: "text", width: 90},
+				{name:"Shipping_address2", type: "text", width: 90},
+				{name:"Shipping_phone1", type: "text", width: 90},
+				{name:"Shipping_phone2", type: "text", width: 90},
+				{name:"Shipping_email", type: "text", width: 90},
+				{name:"Shipping_remark", type: "text", width: 90},
+				{name:"Shipping_checked", type: "text", width: 90},
+				{name:"Latitude", type: "text", width: 90},
+				{name:"Longitude", type: "text", width: 90},
+				{name:"UserCreate", type: "text", width: 90},
+				{name:"UserUpdate", type: "text", width: 90},
+				{name:"CreateDate", type: "text", width: 90},
+				{name:"UpdateDate", type: "text", width: 90},
+				{type: "control", width: 100, editButton: false,
+				itemTemplate: function (value, item) {
+					var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+					var $customViewButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class='glyphicon glyphicon-eye-open'></span>").click(function (e) {location.href = "/member/view/" + item.id; e.stopPropagation();});
+					var $customEditButton = $("<button>").attr({class: "btn btn-success btn-xs"}).html("<span class='glyphicon glyphicon-pencil'></span>").click(function (e) {location.href = "/member/update/" + item.id; e.stopPropagation();});
+					return $("<div>").append($customViewButton).append("   ").append($customEditButton).append("    ");
+					}
+				}
+			]
+		});
+</script>

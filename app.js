@@ -37,6 +37,9 @@ app.use('/users', require('./routes/users'));
 app.use('/banks', require('./routes/banks'));
 app.use('/generator', require('./routes/generator'));
 app.use('/company', require('./routes/company'));
+app.use('/employee', require('./routes/employee'));
+app.use('/member', require('./routes/member'));
+app.use('/factories', require('./routes/factories'));
 
 /*
  app.use('/php', require('./routes/php'));

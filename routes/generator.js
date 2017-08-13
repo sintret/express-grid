@@ -4,6 +4,7 @@ var mkdirp = require('mkdirp');
 const Sequelize = require('sequelize');
 var sequelize = require('./../models/config.js');
 var Generator = require('./../components/Generator');
+var fs = require('fs');
 
 /* GET tables listing. */
 router.get('/', function (req, res, next) {
@@ -22,8 +23,8 @@ router.post('/', function (req, res, next) {
         console.log(JSON.stringify(rows));
 
         var fs = require('fs');
-        var fileModel = appRoot+ "/models/"+table+".js";
-        var g = new Generator(rows,table);
+        var fileModel = appRoot + "/models/" + table + ".js";
+        var g = new Generator(rows, table, appRoot);
         fs.writeFile(fileModel, g.outputModel(), function (err) {
             if (err) {
                 return console.log(g.outputModel());
@@ -32,7 +33,7 @@ router.post('/', function (req, res, next) {
             console.log("The file models was saved!");
         });
 
-        var fileRoutes = appRoot+ "/routes/"+ table +".js";
+        var fileRoutes = appRoot + "/routes/" + table + ".js";
         fs.writeFile(fileRoutes, g.outputRoutes(), function (err) {
             if (err) {
                 return console.log(g.outputRoutes());
@@ -41,14 +42,27 @@ router.post('/', function (req, res, next) {
             console.log("The file routes was saved!");
         });
 
-        var fileViewsIndex = appRoot+ "/views/"+ table +"/index.ejs";
-        fs.writeFile(fileViewsIndex, g.outputRoutes(), function (err) {
+        var dirViews = appRoot + "/views/" + table;
+        mkdirp(dirViews, function (err) {
             if (err) {
-                return console.log(g.outputRoutes());
-            }
+                console.error(err);
+            } else {
+                var index = dirViews + "/index.ejs";
+                fs.writeFile(index, g.outputViewsIndex(), function (err) {
+                    if (err) {
+                        return console.log(g.outputViewsIndex());
+                    }
+                });
 
-            console.log("The file routes was saved!");
-        });
+                var grid = dirViews + "/grid.ejs";
+                fs.writeFile(grid, g.outputViewsGrid(), function (err) {
+                    if (err) {
+                        return console.log(g.outputViewsGrid());
+                    }
+                });
+            }
+        })
+
 
         res.json(rows);
         //res.render("generator/describe", {rows: tableArray(rows)});
