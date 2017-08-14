@@ -28,18 +28,19 @@
 				deleteItem: function (item) {return $.ajax({type: "DELETE",url: "/factories",data: item});}
 			},
 			fields: [
-				{name:"name", type: "text", width: 90},
-				{name:"address", type: "text", width: 90},
-				{name:"city", type: "text", width: 90},
-				{name:"province", type: "text", width: 90},
-				{name:"code", type: "text", width: 90},
-				{name:"status", type: "text", width: 90},{type:"control"},
-				{type: "control", width: 100, editButton: true,deleteButton:true,
+				{name:"name", title:"Name", type: "text", width: 90},
+				{name:"address", title:"Address", type: "text", width: 90},
+				{name:"city", title:"City", type: "text", width: 90},
+				{name:"province", title:"Province", type: "text", width: 90},
+				{name:"code", title:"Code", type: "text", width: 90},
+				{name:"status", title:"Status", type: "text", width: 90},
+				{type: "control", width: 100, editButton: false,
 				itemTemplate: function (value, item) {
 					var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
 					var $customViewButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class='glyphicon glyphicon-eye-open'></span>").click(function (e) {location.href = "/factories/view/" + item.id; e.stopPropagation();});
 					var $customEditButton = $("<button>").attr({class: "btn btn-success btn-xs"}).html("<span class='glyphicon glyphicon-pencil'></span>").click(function (e) {location.href = "/factories/update/" + item.id; e.stopPropagation();});
-					return $("<div>").append($customViewButton).append("   ").append($customEditButton).append("    ");
+					var $customDeleteButton = $("<button>").attr({class: "btn btn-danger btn-xs"}).html("<span class='glyphicon glyphicon-trash'></span>").click(function (e) { if(window.confirm("delete selected data ?")){$.ajax({url:"/factories/"+item.id,type:"DELETE",data:{id:item.id},success:function(data){location.href="";}});};e.stopPropagation();});
+					return $("<div>").append($customViewButton).append("   ").append($customEditButton).append("    ").append($customDeleteButton);
 					}
 				}
 			]

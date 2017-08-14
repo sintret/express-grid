@@ -18,6 +18,8 @@ var Generator = function (arr, table, dirRoot) {
     table = table || "";
     dirRoot = dirRoot || "";
 
+    var objectAndType = [];
+
     this.tab = '\t';
     this.newLine = '\r\n';
     this.spaces = '   ';
@@ -93,8 +95,16 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + this.capitalizeFirstLetter(table) + ".findById(req.params.id).then(function (model) {" + this.newLine;
         out += this.tab + this.tab + 'res.render("layouts/main", {' + this.newLine;
         out += this.tab + this.tab + this.tab + "data: {model:model}," + this.newLine;
-        out += this.tab + this.tab + this.tab + 'renderBody: "'+table+'/view.ejs"' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'renderBody: "' + table + '/view.ejs"' + this.newLine;
         out += this.tab + this.tab + '});' + this.newLine;
+        out += this.tab + '});' + this.newLine;
+        out += '});' + this.newLine;
+
+        //create controller
+        out += "router.get('/create', function (req, res, next) {" + this.newLine;
+        out += this.tab + 'res.render("layouts/main", {' + this.newLine;
+        out += this.tab + this.tab + 'data: {model:' + this.capitalizeFirstLetter(table) + '.attributeData},' + this.newLine;
+        out += this.tab + this.tab + 'renderBody: "' + table + '/form.ejs"' + this.newLine;
         out += this.tab + '});' + this.newLine;
         out += '});' + this.newLine;
 
@@ -199,13 +209,13 @@ var Generator = function (arr, table, dirRoot) {
         var keys = this.keys();
         var out = '';
         out += '<div class="page-header">' + this.newLine;
-        out += this.tab + "<h1>" + this.capitalizeFirstLetter(table)  + " <%= data.model.id %> </h1>" + this.newLine;
+        out += this.tab + "<h1>" + this.capitalizeFirstLetter(table) + " <%= data.model.id %> </h1>" + this.newLine;
         out += "</div>" + this.newLine + this.newLine;
 
         out += '<table class="table table-striped table-responsive">' + this.newLine;
         out += this.tab + '<tbody>' + this.newLine;
 
-       for (var i = 0; i < keys.length; i++) {
+        for (var i = 0; i < keys.length; i++) {
             out += this.tab + this.tab + '<tr>' + this.newLine;
             out += this.tab + this.tab + this.tab + '<th>' + this.newLine;
             out += this.tab + this.tab + this.tab + this.capitalizeFirstLetter(keys[i]) + this.newLine;
@@ -217,6 +227,61 @@ var Generator = function (arr, table, dirRoot) {
         }
         out += this.tab + '</tbody>' + this.newLine;
         out += '</table>' + this.newLine;
+
+        return out;
+    }
+
+    this.outputViewsCreate = function () {
+
+        var keys = this.keys();
+        var out = '';
+        out += '<div class="page-header">' + this.newLine;
+        out += this.tab + "<h1>" + this.capitalizeFirstLetter(table) + " Form  </h1>" + this.newLine;
+        out += "</div>" + this.newLine + this.newLine;
+
+        out += '<form method="post" action="/' + table + '/create" enctype="multipart/form-data">' + this.newLine;
+
+        var dataFields = this.dataFields();
+
+        dataFields.forEach(function (key) {
+            if (key.name != "id") {
+                var type = key.type;
+                var g = new Generator();
+
+                var j = g.tab + '<div class="form-group">' + g.newLine;
+                j += g.tab + g.tab + '<label for="' + key.name + '">' + g.capitalizeFirstLetter(key.name) + '</label>' + g.newLine;
+                if (type.indexOf("INTEGER") >= 0) {
+                    j += g.tab + g.tab + '<select class="form-control" name="' + key.name + '" id="' + key.name + '">' + g.newLine;
+                    j += g.tab + g.tab + g.tab + '<option value=""> -- </option>' + g.newLine;
+                    j += g.tab + g.tab + '</select>' + g.newLine;
+
+                } else if (type.indexOf("STRING") >= 0) {
+                    j += g.tab + g.tab + '<input type="text" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + key.name + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
+
+                } else if (type.indexOf("TEXT") >= 0) {
+                    j += g.tab +g.tab +  '<textarea class="form-control" id="' + key.name + '" name="' + key.name + '" rows="3"><%= data.model.' + key.name + '%></textarea>' + g.newLine;
+
+                } else if (type.indexOf("DATEONLY") >= 0) {
+                    j += g.tab + g.tab + '<input type="date" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + key.name + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
+
+                } else if (type.indexOf("DATE") >= 0) {
+                    j += g.tab + g.tab + '<input type="date" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + key.name + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
+
+                } else {
+                    j += g.tab + g.tab + '<input type="text" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + key.name + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
+
+                }
+                j += g.tab + '</div>' + g.newLine;
+
+
+                out += j;
+            }
+
+        });
+
+        out+= ' <div class="form-group"><button type="submit" class="btn btn-success">Submit</button></div>'
+
+        out += '</form>' + this.newLine;
 
         return out;
     }
@@ -234,6 +299,29 @@ var Generator = function (arr, table, dirRoot) {
 
         return out;
     }
+
+    this.dataFields = function () {
+        var obj = [];
+        for (var i = 0; i < this.fields.length; i++) {
+            //  out += this.structure(this.fields[i]);
+            var o = this.fields[i];
+            var t = [];
+            t.name = o['Field'];
+            if (o.Null == "NO") {
+                t.allowNull = false;
+            } else {
+                t.allowNull = true;
+            }
+
+            t.type = this.setType(o["Type"]);
+
+            obj.push(t);
+        }
+
+
+        return obj;
+    }
+
 
     this.grid = function () {
         var out = '';
@@ -284,10 +372,10 @@ var Generator = function (arr, table, dirRoot) {
         s += this.getType(obj['Type']) + ',';
         if (obj.Null == "NO") {
             s += this.newLine;
-            s += this.tab + this.tab + 'allowNull: true,';
+            s += this.tab + this.tab + 'allowNull: false,';
         } else {
             s += this.newLine;
-            s += this.tab + this.tab + 'allowNull: false,';
+            s += this.tab + this.tab + 'allowNull: true,';
         }
 
         if (obj.Key == "PRI") {
@@ -312,6 +400,11 @@ var Generator = function (arr, table, dirRoot) {
     }
 
     this.getType = function (type) {
+        var r = this.setType(type);
+        return this.tab + this.tab + "type: Sequelize." + r.toUpperCase();
+    }
+
+    this.setType = function (type) {
         type = type.toLowerCase();
         type = type.replace("unsigned", "");
         type = type.trim();
@@ -321,7 +414,7 @@ var Generator = function (arr, table, dirRoot) {
         var r;
 
         if (type.indexOf(s) >= 0) {
-            r = t;
+            r = type;
         } else if (type.indexOf(tiny) >= 0) {
             r = type.replace(tiny, "INTEGER");
         } else {
@@ -330,7 +423,7 @@ var Generator = function (arr, table, dirRoot) {
             r = type.replaceArray(find, replace);
         }
 
-        return this.tab + this.tab + "type: Sequelize." + r.toUpperCase();
+        return r;
     }
 
 

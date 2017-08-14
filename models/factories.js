@@ -3,33 +3,33 @@ var sequelize = require('./config.js');
 var attributeData = {
 	id: {
 		type: Sequelize.INTEGER(10),
-		allowNull: true,
+		allowNull: false,
 		primaryKey: true,
 		autoIncrement: true
 	},
 	name: {
 		type: Sequelize.STRING(255),
-		allowNull: true
+		allowNull: false
 	},
 	address: {
 		type: Sequelize.STRING(255),
-		allowNull: false
+		allowNull: true
 	},
 	city: {
 		type: Sequelize.STRING(255),
-		allowNull: false
+		allowNull: true
 	},
 	province: {
 		type: Sequelize.STRING(255),
-		allowNull: false
+		allowNull: true
 	},
 	code: {
 		type: Sequelize.STRING(20),
-		allowNull: false
+		allowNull: true
 	},
 	status: {
 		type: Sequelize.ENUM('1','0'),
-		allowNull: true
+		allowNull: false
 	}
 }
 
