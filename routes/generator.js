@@ -60,6 +60,13 @@ router.post('/', function (req, res, next) {
                         return console.log(g.outputViewsGrid());
                     }
                 });
+
+                var view = dirViews + "/view.ejs";
+                fs.writeFile(view, g.outputViewsView(), function (err) {
+                    if (err) {
+                        return console.log(g.outputViewsView());
+                    }
+                });
             }
         })
 

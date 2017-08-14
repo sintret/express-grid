@@ -63,27 +63,41 @@ var Generator = function (arr, table, dirRoot) {
         out += "var " + this.capitalizeFirstLetter(table) + " = require('./../models/" + table + ".js');" + this.newLine + this.newLine
         out += "/* GET " + table + " listing. */" + this.newLine;
 
+        //index controller
         out += "router.get('/', function (req, res, next) {" + this.newLine;
         out += this.tab + 'res.render("layouts/main", {' + this.newLine;
+        out += this.tab + this.tab + 'data: {table:"' + table + '"},' + this.newLine;
         out += this.tab + this.tab + 'renderBody: "' + table + '/index.ejs",' + this.newLine;
-        out += this.tab + this.tab + 'renderEnd: "'+table+'/grid.ejs",' + this.newLine;
-        out += this.tab + this.tab + 'data: {table:"' + table + '"}' + this.newLine;
+        out += this.tab + this.tab + 'renderEnd: "' + table + '/grid.ejs"' + this.newLine;
         out += this.tab + '});' + this.newLine;
         out += '});' + this.newLine;
 
+        //list via grid controller / load data
         out += "router.get('/list', function (req, res, next) {" + this.newLine;
         out += this.tab + this.capitalizeFirstLetter(table) + ".getGridFilter(req.query).then(function (items) {" + this.newLine;
         out += this.tab + this.tab + "res.json(items);" + this.newLine;
         out += this.tab + "});" + this.newLine;
         out += "});" + this.newLine;
 
+        //delete controller
         out += "router.delete('/:id', function (req, res, next) {" + this.newLine;
-        out += this.tab + this.capitalizeFirstLetter(table) +".destroy({" + this.newLine;
+        out += this.tab + this.capitalizeFirstLetter(table) + ".destroy({" + this.newLine;
         out += this.tab + this.tab + "where: {id: req.params.id}" + this.newLine;
-        out += this.tab+"}).then(function (deletedOwner) {" + this.newLine;
+        out += this.tab + "}).then(function (deletedOwner) {" + this.newLine;
         out += this.tab + this.tab + "res.json(deletedOwner);" + this.newLine;
         out += this.tab + "});" + this.newLine;
         out += "});" + this.newLine;
+
+        //view controller
+        out += "router.get('/view/:id', function (req, res, next) {" + this.newLine;
+        out += this.tab + this.capitalizeFirstLetter(table) + ".findById(req.params.id).then(function (model) {" + this.newLine;
+        out += this.tab + this.tab + 'res.render("layouts/main", {' + this.newLine;
+        out += this.tab + this.tab + this.tab + "data: {model:model}," + this.newLine;
+        out += this.tab + this.tab + this.tab + 'renderBody: "'+table+'/view.ejs"' + this.newLine;
+        out += this.tab + this.tab + '});' + this.newLine;
+        out += this.tab + '});' + this.newLine;
+        out += '});' + this.newLine;
+
 
         out += "module.exports = router;" + this.newLine;
 
@@ -103,7 +117,7 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + this.tab + '</div>' + this.newLine;
         out += this.tab + this.tab + '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> ' + this.capitalizeFirstLetter(table) + ' Grid</h3>' + this.newLine;
         out += this.tab + this.tab + '<div class="clearfix"></div>' + this.newLine;
-        out += this.tab +'</div>' + this.newLine;
+        out += this.tab + '</div>' + this.newLine;
         out += this.tab + '<div class="kv-panel-before">' + this.newLine;
         out += this.tab + this.tab + '<div class="pull-right">' + this.newLine;
         out += this.tab + this.tab + this.tab + '<div class="btn-toolbar kv-grid-toolbar" role="toolbar">' + this.newLine;
@@ -158,8 +172,8 @@ var Generator = function (arr, table, dirRoot) {
 
         var keys = this.keys();
         for (var i = 0; i < keys.length; i++) {
-            if(keys[i] != "id")
-            out += this.tab + this.tab + this.tab + this.tab + '{name:"' + keys[i] + '", title:"'+this.capitalizeFirstLetter(keys[i])+'", type: "text", width: 90},' + this.newLine;
+            if (keys[i] != "id")
+                out += this.tab + this.tab + this.tab + this.tab + '{name:"' + keys[i] + '", title:"' + this.capitalizeFirstLetter(keys[i]) + '", type: "text", width: 90},' + this.newLine;
         }
         out += this.tab + this.tab + this.tab + this.tab + '{type: "control", width: 100, editButton: false,' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + 'itemTemplate: function (value, item) {' + this.newLine;
@@ -171,12 +185,38 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + this.tab + this.tab + this.tab + this.tab + '}' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + '}' + this.newLine;
 
-
         out += this.tab + this.tab + this.tab + ']' + this.newLine;
         out += this.tab + this.tab + '});' + this.newLine;
 
 
         out += '</script>';
+
+        return out;
+    }
+
+    this.outputViewsView = function () {
+
+        var keys = this.keys();
+        var out = '';
+        out += '<div class="page-header">' + this.newLine;
+        out += this.tab + "<h1>" + this.capitalizeFirstLetter(table)  + " <%= data.model.id %> </h1>" + this.newLine;
+        out += "</div>" + this.newLine + this.newLine;
+
+        out += '<table class="table table-striped table-responsive">' + this.newLine;
+        out += this.tab + '<tbody>' + this.newLine;
+
+       for (var i = 0; i < keys.length; i++) {
+            out += this.tab + this.tab + '<tr>' + this.newLine;
+            out += this.tab + this.tab + this.tab + '<th>' + this.newLine;
+            out += this.tab + this.tab + this.tab + this.capitalizeFirstLetter(keys[i]) + this.newLine;
+            out += this.tab + this.tab + this.tab + '</th>' + this.newLine;
+            out += this.tab + this.tab + this.tab + '<td>' + this.newLine;
+            out += this.tab + this.tab + this.tab + '<%= data.model.' + keys[i] + ' %>' + this.newLine;
+            out += this.tab + this.tab + this.tab + '</td>' + this.newLine;
+            out += this.tab + this.tab + '</tr>' + this.newLine;
+        }
+        out += this.tab + '</tbody>' + this.newLine;
+        out += '</table>' + this.newLine;
 
         return out;
     }
@@ -273,7 +313,7 @@ var Generator = function (arr, table, dirRoot) {
 
     this.getType = function (type) {
         type = type.toLowerCase();
-        type = type.replace("unsigned","");
+        type = type.replace("unsigned", "");
         type = type.trim();
         var s = 'bigint';
         var tiny = 'tinyint';

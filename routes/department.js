@@ -22,4 +22,13 @@ router.delete('/:id', function (req, res, next) {
 		res.json(deletedOwner);
 	});
 });
+router.get('/view/:id', function (req, res, next) {
+	Department.findById(req.params.id).then(function (model) {
+		res.render("layouts/main", {
+			data: {model:model},
+			renderBody: "department/view.ejs"
+		});
+	});
+
+});
 module.exports = router;

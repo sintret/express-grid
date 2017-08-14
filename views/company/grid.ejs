@@ -1,59 +1,81 @@
 <script>
-    var o = ["code", "codes", "alias", "employeeCategoryId", "typeTaxId", "workDays", "name", "npwp", "address", "kota", "description", "jamsostekNo", "telephone", "fax", "virtual_account", "contactPerson", "officerName", "officerId", "position", "createDate", "formulaId", "group", "groupId", "contractNo", "startContract", "endContract", "kodeAkunPajak", "kodeSetoran", "uraianPembayaran", "jointDate", "tenagaKerja", "upah", "bpjs", "online", "logo", "onlineDate", "createBy", "updateDate", "updateBy", "id"];
-    var fields = [];
-    for (var i = 0; i < o.length; i++) {
-        if (o[i] != "id") {
-            var f = {
-                name: o[i],
-                type: "text",
-                width: 90
-            }
-            fields.push(f);
-        }
-    }
-
-    var control = {
-        type: "control", width: 100, editButton: false,
-        itemTemplate: function (value, item) {
-            var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
-            var $customViewButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class='glyphicon glyphicon-eye'></span>").click(function (e) {location.href = "/company/view/" + item.id; e.stopPropagation();});
-            var $customEditButton = $("<button>").attr({class: "btn btn-success btn-xs"}).html("<span class='glyphicon glyphicon-pencil'></span>").click(function (e) {location.href = '/company/update/' + item.id; e.stopPropagation();});
-            return $("<div>").prepend($customViewButton).prepend("   ").append($customEditButton).prepend("    ");
-        }
-    }
-
-    fields.push(control);
-
-    // List of countries for the select field
-    $("#jsGrid").jsGrid({
-        width: "100%",
-        filtering: false,
-        inserting: false,
-        editing: true,
-        sorting: false,
-        autoload: true,
-        paging: true,
-        pageLoading: true,
-        css: "kv-grid-table table table-bordered table-striped kv-table-wrap",
-        pageSize: 20,
-        pageButtonCount: 10,
-        deleteConfirm: "Do you really want to delete client?",
-        controller: {
-            loadData: function (filter) {
-                return $.ajax({
-                    datatype: 'json',
-                    type: "GET",
-                    url: "/company/list",
-                    data: filter,
-                    success: function (html) {
-                        var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = 'Showing <b>'; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");
-                    }
-                });
-            },
-            updateItem: function (item) {return $.ajax({type: "PUT",url: "/users",data: item});},
-            deleteItem: function (item) {return $.ajax({type: "DELETE",url: "/users",data: item});}
-        },
-        fields: fields
-    });
-
+	$("#jsGrid").jsGrid({
+		width: "100%",
+		filtering: true,
+		inserting: false,
+		editing: true,
+		sorting: false,
+		autoload: true,
+		paging: true,
+		pageLoading: true,
+		css: "kv-grid-table table table-bordered table-striped kv-table-wrap",
+		pageSize: 20,
+		pageButtonCount: 10,
+		deleteConfirm: "Do you really want to delete client?",
+			controller: {
+				loadData: function (filter) {
+					return $.ajax({
+						datatype: "json",
+						type: "GET",
+						url: "/company/list",
+						data: filter,
+						success: function (html) {
+							var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = "Showing <b>"; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");
+						}
+					});
+				},
+				updateItem: function (item) {return $.ajax({type: "PUT",url: "/company",data: item});},
+				deleteItem: function (item) {return $.ajax({type: "DELETE",url: "/company",data: item});}
+			},
+			fields: [
+				{name:"code", title:"Code", type: "text", width: 90},
+				{name:"codes", title:"Codes", type: "text", width: 90},
+				{name:"alias", title:"Alias", type: "text", width: 90},
+				{name:"employeeCategoryId", title:"EmployeeCategoryId", type: "text", width: 90},
+				{name:"typeTaxId", title:"TypeTaxId", type: "text", width: 90},
+				{name:"workDays", title:"WorkDays", type: "text", width: 90},
+				{name:"name", title:"Name", type: "text", width: 90},
+				{name:"npwp", title:"Npwp", type: "text", width: 90},
+				{name:"address", title:"Address", type: "text", width: 90},
+				{name:"kota", title:"Kota", type: "text", width: 90},
+				{name:"description", title:"Description", type: "text", width: 90},
+				{name:"jamsostekNo", title:"JamsostekNo", type: "text", width: 90},
+				{name:"telephone", title:"Telephone", type: "text", width: 90},
+				{name:"fax", title:"Fax", type: "text", width: 90},
+				{name:"virtual_account", title:"Virtual_account", type: "text", width: 90},
+				{name:"contactPerson", title:"ContactPerson", type: "text", width: 90},
+				{name:"officerName", title:"OfficerName", type: "text", width: 90},
+				{name:"officerId", title:"OfficerId", type: "text", width: 90},
+				{name:"position", title:"Position", type: "text", width: 90},
+				{name:"createDate", title:"CreateDate", type: "text", width: 90},
+				{name:"formulaId", title:"FormulaId", type: "text", width: 90},
+				{name:"group", title:"Group", type: "text", width: 90},
+				{name:"groupId", title:"GroupId", type: "text", width: 90},
+				{name:"contractNo", title:"ContractNo", type: "text", width: 90},
+				{name:"startContract", title:"StartContract", type: "text", width: 90},
+				{name:"endContract", title:"EndContract", type: "text", width: 90},
+				{name:"kodeAkunPajak", title:"KodeAkunPajak", type: "text", width: 90},
+				{name:"kodeSetoran", title:"KodeSetoran", type: "text", width: 90},
+				{name:"uraianPembayaran", title:"UraianPembayaran", type: "text", width: 90},
+				{name:"jointDate", title:"JointDate", type: "text", width: 90},
+				{name:"tenagaKerja", title:"TenagaKerja", type: "text", width: 90},
+				{name:"upah", title:"Upah", type: "text", width: 90},
+				{name:"bpjs", title:"Bpjs", type: "text", width: 90},
+				{name:"online", title:"Online", type: "text", width: 90},
+				{name:"logo", title:"Logo", type: "text", width: 90},
+				{name:"onlineDate", title:"OnlineDate", type: "text", width: 90},
+				{name:"createBy", title:"CreateBy", type: "text", width: 90},
+				{name:"updateDate", title:"UpdateDate", type: "text", width: 90},
+				{name:"updateBy", title:"UpdateBy", type: "text", width: 90},
+				{type: "control", width: 100, editButton: false,
+				itemTemplate: function (value, item) {
+					var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+					var $customViewButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class='glyphicon glyphicon-eye-open'></span>").click(function (e) {location.href = "/company/view/" + item.id; e.stopPropagation();});
+					var $customEditButton = $("<button>").attr({class: "btn btn-success btn-xs"}).html("<span class='glyphicon glyphicon-pencil'></span>").click(function (e) {location.href = "/company/update/" + item.id; e.stopPropagation();});
+					var $customDeleteButton = $("<button>").attr({class: "btn btn-danger btn-xs"}).html("<span class='glyphicon glyphicon-trash'></span>").click(function (e) { if(window.confirm("delete selected data ?")){$.ajax({url:"/company/"+item.id,type:"DELETE",data:{id:item.id},success:function(data){location.href="";}});};e.stopPropagation();});
+					return $("<div>").append($customViewButton).append("   ").append($customEditButton).append("    ").append($customDeleteButton);
+					}
+				}
+			]
+		});
 </script>
