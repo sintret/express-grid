@@ -76,6 +76,15 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + this.tab + "res.json(items);" + this.newLine;
         out += this.tab + "});" + this.newLine;
         out += "});" + this.newLine;
+
+        out += "router.delete('/:id', function (req, res, next) {" + this.newLine;
+        out += this.tab + this.capitalizeFirstLetter(table) +".destroy({" + this.newLine;
+        out += this.tab + this.tab + "where: {id: req.params.id}" + this.newLine;
+        out += this.tab+"}).then(function (deletedOwner) {" + this.newLine;
+        out += this.tab + this.tab + "res.json(deletedOwner);" + this.newLine;
+        out += this.tab + "});" + this.newLine;
+        out += "});" + this.newLine;
+
         out += "module.exports = router;" + this.newLine;
 
         return out;
@@ -150,14 +159,15 @@ var Generator = function (arr, table, dirRoot) {
         var keys = this.keys();
         for (var i = 0; i < keys.length; i++) {
             if(keys[i] != "id")
-            out += this.tab + this.tab + this.tab + this.tab + '{name:"' + keys[i] + '", type: "text", width: 90},' + this.newLine;
+            out += this.tab + this.tab + this.tab + this.tab + '{name:"' + keys[i] + '", title:"'+this.capitalizeFirstLetter(keys[i])+'", type: "text", width: 90},' + this.newLine;
         }
         out += this.tab + this.tab + this.tab + this.tab + '{type: "control", width: 100, editButton: false,' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + 'itemTemplate: function (value, item) {' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + this.tab + 'var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + this.tab + 'var $customViewButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class=\'glyphicon glyphicon-eye-open\'></span>").click(function (e) {location.href = "/' + table + '/view/" + item.id; e.stopPropagation();});' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + this.tab + 'var $customEditButton = $("<button>").attr({class: "btn btn-success btn-xs"}).html("<span class=\'glyphicon glyphicon-pencil\'></span>").click(function (e) {location.href = "/' + table + '/update/" + item.id; e.stopPropagation();});' + this.newLine;
-        out += this.tab + this.tab + this.tab + this.tab + this.tab + 'return $("<div>").append($customViewButton).append("   ").append($customEditButton).append("    ");' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + 'var $customDeleteButton = $("<button>").attr({class: "btn btn-danger btn-xs"}).html("<span class=\'glyphicon glyphicon-trash\'></span>").click(function (e) { if(window.confirm("delete selected data ?")){$.ajax({url:"/' + table + '/"+item.id,type:"DELETE",data:{id:item.id},success:function(data){location.href="";}});};e.stopPropagation();});' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + 'return $("<div>").append($customViewButton).append("   ").append($customEditButton).append("    ").append($customDeleteButton);' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + this.tab + '}' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + '}' + this.newLine;
 

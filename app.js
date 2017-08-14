@@ -40,6 +40,7 @@ app.use('/company', require('./routes/company'));
 app.use('/employee', require('./routes/employee'));
 app.use('/member', require('./routes/member'));
 app.use('/factories', require('./routes/factories'));
+app.use('/department', require('./routes/department'));
 
 /*
  app.use('/php', require('./routes/php'));

@@ -182,3 +182,9 @@ td.kv-group-odd {
         overflow: hidden;
     }
 }
+.jsgrid-header-row {
+    word-wrap: break-word
+}
+.jsgrid-cell {
+    word-wrap: break-word
+}
