@@ -48,6 +48,19 @@ var Generator = function (arr, table, dirRoot) {
         out += 'model.keys = ' + JSON.stringify(this.keys()) + ';';
         out += this.newLine + this.newLine;
         out += this.grid();
+        out += this.newLine;
+        out += 'model.insertData = function (data,callback) {'+this.newLine;
+        out += this.tab + 'callback = callback || function () {}'+this.newLine+this.newLine;
+        out += this.tab + 'return new Promise(function (resolve, reject) {'+this.newLine;
+        out += this.tab + this.tab + 'model.create(data).then(function (x) {'+this.newLine;
+        out += this.tab + this.tab + this.tab + 'var json = {};json.status=1;json.data=x;resolve(json);'+this.newLine;
+        out += this.tab + this.tab + '}).catch(Sequelize.ValidationError, function (err) {'+this.newLine;
+        out += this.tab + this.tab + this.tab + 'var json = {};json.status=0;json.data=err;reject(json);'+this.newLine;
+        out += this.tab + this.tab + '});'+this.newLine;
+        out += this.tab + '});'+this.newLine;
+        out += '}'+this.newLine;
+
+
         out += 'module.exports = model;';
 
 
@@ -105,6 +118,15 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + 'res.render("layouts/main", {' + this.newLine;
         out += this.tab + this.tab + 'data: {model:' + this.capitalizeFirstLetter(table) + '.attributeData},' + this.newLine;
         out += this.tab + this.tab + 'renderBody: "' + table + '/create.ejs"' + this.newLine;
+        out += this.tab + '});' + this.newLine;
+        out += '});' + this.newLine;
+
+        //post create controller
+        out += "router.post('/create', function (req, res, next) {" + this.newLine ;
+        out += this.tab +  this.capitalizeFirstLetter(table) + '.insertData(req.body).then(function (data) {' + this.newLine;
+        out += this.tab + this.tab + 'res.json(data);' + this.newLine;
+        out += this.tab + '}).catch(function (err) {' + this.newLine;
+        out += this.tab + this.tab + 'res.json(err);' + this.newLine;
         out += this.tab + '});' + this.newLine;
         out += '});' + this.newLine;
 
@@ -289,7 +311,7 @@ var Generator = function (arr, table, dirRoot) {
         var keys = this.keys();
 
         var out = '';
-        out += '<form method="post" action="/' + table + '/create" >' + this.newLine;
+        out += '<form id="'+table+'-form" method="post" action="/' + table + '/create" >' + this.newLine;
 
         var dataFields = this.dataFields();
 
@@ -298,7 +320,7 @@ var Generator = function (arr, table, dirRoot) {
                 var type = key.type;
                 var g = new Generator();
 
-                var j = g.tab + '<div class="form-group">' + g.newLine;
+                var j = g.tab + '<div class="form-group div'+key.name+'">' + g.newLine;
                 j += g.tab + g.tab + '<label for="' + key.name + '">' + g.capitalizeFirstLetter(key.name) + '</label>' + g.newLine;
                 if (type.indexOf("INTEGER") >= 0) {
                     j += g.tab + g.tab + '<select class="form-control" name="' + key.name + '" id="' + key.name + '">' + g.newLine;
@@ -329,11 +351,45 @@ var Generator = function (arr, table, dirRoot) {
 
         });
 
-        out += ' <div class="form-group"><button type="submit" class="btn btn-success">Submit</button></div>' + this.newLine;
+        out += ' <div class="form-group"><button id="'+table+'-submit" type="submit" class="btn btn-success">Submit</button></div>' + this.newLine;
 
-        out += '</form>' + this.newLine;
+        out += '</form>' + this.newLine+ this.newLine;
+
+        out += '<% include formjs.ejs %>';
 
         return out;
+    }
+
+    this.outputViewsFormjs = function () {
+        var out = '';
+        out += '<script>'+ this.newLine;
+        out += this.tab + 'var form = document.getElementById("'+table+'-form");'+ this.newLine;
+        out += this.tab + 'form.onsubmit = function (ev) {'+ this.newLine;
+        out += this.tab + this.tab +'ev.preventDefault();'+ this.newLine;
+        out += this.tab + this.tab +'$.ajax({'+ this.newLine;
+        out += this.tab + this.tab + this.tab +"type: 'POST',"+ this.newLine;
+        out += this.tab + this.tab + this.tab +"url: '/"+table+"/create',"+ this.newLine;
+        out += this.tab + this.tab + this.tab +"data: $(this).serialize(),"+ this.newLine;
+        out += this.tab + this.tab + this.tab +"success: function (data) {"+ this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab +"if (data.status == 1) {"+ this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab +'location.href = "/'+table+'/view/" + data.data.id;'+ this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + "} else {"+ this.newLine;
+        out += this.tab + this.tab + this.tab +"var errors = data.data.errors;"+ this.newLine;
+        out += this.tab + this.tab + this.tab +"for (i = 0; i < errors.length; i++) {"+ this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab +"var path = errors[i]['path'];"+ this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab +"var message = errors[i]['message'];"+ this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab +"$('.div'+path).addClass('has-error');"+ this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab +"$('.div'+path).append('<div class=\"help-block\">' + message + '</div>');"+ this.newLine;
+        out += this.tab + this.tab + this.tab +"}"+ this.newLine;
+        out += this.tab + this.tab + "}"+ this.newLine;
+        out += this.tab +"}"+ this.newLine;
+        out += "});"+ this.newLine;
+        out += "}"+ this.newLine;
+
+        out += '</script>';
+
+        return out;
+
     }
 
     this.attributeData = function () {

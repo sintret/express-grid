@@ -86,6 +86,13 @@ router.post('/', function (req, res, next) {
                         return console.log(g.outputViewsForm());
                     }
                 });
+
+                var formjs = dirViews + "/formjs.ejs";
+                fs.writeFile(formjs, g.outputViewsFormjs(), function (err) {
+                    if (err) {
+                        return console.log(g.outputViewsFormjs());
+                    }
+                });
             }
         })
 

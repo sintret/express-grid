@@ -115,4 +115,16 @@ model.getGridFilter = function (query, callback) {
 		});
 	});
 }
+
+model.insertData = function (data,callback) {
+	callback = callback || function () {}
+
+	return new Promise(function (resolve, reject) {
+		model.create(data).then(function (x) {
+			var json = {};json.status=1;json.data=x;resolve(json);
+		}).catch(Sequelize.ValidationError, function (err) {
+			var json = {};json.status=0;json.data=err;reject(json);
+		});
+	});
+}
 module.exports = model;

@@ -36,6 +36,13 @@ router.get('/create', function (req, res, next) {
 		renderBody: "bank/create.ejs"
 	});
 });
+router.post('/create', function (req, res, next) {
+	Bank.insertData(req.body).then(function (data) {
+		res.json(data);
+	}).catch(function (err) {
+		res.json(err);
+	});
+});
 router.get('/update', function (req, res, next) {
 	res.render("layouts/main", {
 		data: {model:Bank.attributeData},

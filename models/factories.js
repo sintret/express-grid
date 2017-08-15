@@ -77,6 +77,8 @@ model.getGridFilter = function (query, callback) {
 			x.itemsCount = results.count;
 			resolve(x);
 			return callback(null, x);
+		}).catch(function (err) {
+			reject(err);
 		});
 	});
 }
@@ -86,11 +88,15 @@ model.insertData = function (data,callback) {
 
 	return new Promise(function (resolve, reject) {
 		model.create(data).then(function (x) {
-			resolve(x);
-			//return callback(null, x);
+			var json = {};
+			json.status=1;
+			json.data=x;
+			resolve(json);
 		}).catch(Sequelize.ValidationError, function (err) {
-			reject(err);
-			//return callback(err);
+			var json = {};
+			json.status=0;
+			json.data=err;
+			reject(json);
 		});
 	});
 }
