@@ -132,12 +132,35 @@ var Generator = function (arr, table, dirRoot) {
 
 
         //update controller
-        out += "router.get('/update', function (req, res, next) {" + this.newLine;
-        out += this.tab + 'res.render("layouts/main", {' + this.newLine;
-        out += this.tab + this.tab + 'data: {model:' + this.capitalizeFirstLetter(table) + '.attributeData},' + this.newLine;
-        out += this.tab + this.tab + 'renderBody: "' + table + '/update.ejs"' + this.newLine;
+        out += "router.get('/update/:id', function (req, res, next) {" + this.newLine;
+        out += this.tab + this.capitalizeFirstLetter(table) + '.findById(req.params.id).then(function (model) {' + this.newLine;
+        out += this.tab + this.tab + 'res.render("layouts/main", {' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'data: {model: model},' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'renderBody: "bank/update.ejs"' + this.newLine;
+        out += this.tab + this.tab + '});' + this.newLine;
+        out += this.tab + '}).catch(function (error) {' + this.newLine;
+        out += this.tab + this.tab + 'var data = {}' + this.newLine;
+        out += this.tab + this.tab + 'data.status = 0; data.data = error;' + this.newLine;
+        out += this.tab + this.tab + 'res.json(data);' + this.newLine;
         out += this.tab + '});' + this.newLine;
         out += '});' + this.newLine;
+
+        //post update controller
+        out += "router.post('/update/:id', function (req, res, next) {" + this.newLine ;
+        out += this.tab + 'var data = {};' + this.newLine;
+        out += this.tab + this.capitalizeFirstLetter(table) +  '.findById(req.params.id).then(function (model) {' + this.newLine;
+        out += this.tab + this.tab + 'model.update(req.body, {where: {id: req.params.id}}).then(function (cb) {' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'data.status = 1; data.data = cb' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'res.json(data);' + this.newLine;
+        out += this.tab + this.tab + '}).catch(function (error) {' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'data.status = 0;data.data = error;' + this.newLine;
+        out += this.tab + this.tab + this.tab +'res.json(data);' + this.newLine;
+        out +=  this.tab + this.tab + '});' + this.newLine;
+        out +=  this.tab + '}).catch(function (error) {' + this.newLine;
+        out +=  this.tab + this.tab + 'data.status = 0; data.data = error;' + this.newLine;
+        out +=  this.tab + this.tab + 'res.json(data);' + this.newLine;
+        out +=  this.tab + this.tab + '});' + this.newLine;
+        out +=  this.tab + '});' + this.newLine;
 
 
         out += "module.exports = router;" + this.newLine;
@@ -366,9 +389,10 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + 'var form = document.getElementById("'+table+'-form");'+ this.newLine;
         out += this.tab + 'form.onsubmit = function (ev) {'+ this.newLine;
         out += this.tab + this.tab +'ev.preventDefault();'+ this.newLine;
+        out += this.tab + this.tab +'var url = window.location.pathname;'+ this.newLine;
         out += this.tab + this.tab +'$.ajax({'+ this.newLine;
         out += this.tab + this.tab + this.tab +"type: 'POST',"+ this.newLine;
-        out += this.tab + this.tab + this.tab +"url: '/"+table+"/create',"+ this.newLine;
+        out += this.tab + this.tab + this.tab +"url: url,"+ this.newLine;
         out += this.tab + this.tab + this.tab +"data: $(this).serialize(),"+ this.newLine;
         out += this.tab + this.tab + this.tab +"success: function (data) {"+ this.newLine;
         out += this.tab + this.tab + this.tab + this.tab +"if (data.status == 1) {"+ this.newLine;

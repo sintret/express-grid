@@ -2,9 +2,10 @@
 	var form = document.getElementById("bank-form");
 	form.onsubmit = function (ev) {
 		ev.preventDefault();
+		var url = window.location.pathname;
 		$.ajax({
 			type: 'POST',
-			url: '/bank/create',
+			url: url,
 			data: $(this).serialize(),
 			success: function (data) {
 				if (data.status == 1) {
