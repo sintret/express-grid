@@ -9,7 +9,12 @@ var attributeData = {
 	},
 	name: {
 		type: Sequelize.STRING(255),
-		allowNull: false
+		allowNull: false,
+		validate : {
+			notEmpty :{
+				msg : 'Name can not empty'
+			}
+		}
 	},
 	address: {
 		type: Sequelize.STRING(255),
@@ -72,6 +77,20 @@ model.getGridFilter = function (query, callback) {
 			x.itemsCount = results.count;
 			resolve(x);
 			return callback(null, x);
+		});
+	});
+}
+
+model.insertData = function (data,callback) {
+	callback = callback || function () {}
+
+	return new Promise(function (resolve, reject) {
+		model.create(data).then(function (x) {
+			resolve(x);
+			//return callback(null, x);
+		}).catch(Sequelize.ValidationError, function (err) {
+			reject(err);
+			//return callback(err);
 		});
 	});
 }

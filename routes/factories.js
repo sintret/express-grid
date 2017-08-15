@@ -33,7 +33,17 @@ router.get('/view/:id', function (req, res, next) {
 router.get('/create', function (req, res, next) {
 	res.render("layouts/main", {
 		data: {model:Factories.attributeData},
-		renderBody: "factories/form.ejs"
+		renderBody: "factories/create.ejs"
 	});
+});
+router.post('/create', function (req, res, next) {
+
+	Factories.insertData(req.body).then(function (data) {
+		res.json(data);
+	}).catch(function (err) {
+		res.json(err);
+	});
+
+	//res.send(JSON.stringify(req.body) + JSON.stringify(req.params));
 });
 module.exports = router;

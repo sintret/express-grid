@@ -1,0 +1,59 @@
+<form method="post" action="/bank/create" enctype="multipart/form-data">
+	<div class="form-group">
+		<label for="swiftCode">SwiftCode</label>
+		<input type="text" class="form-control" id="swiftCode" name="swiftCode" placeholder="swiftCode" value="<%= data.model.swiftCode%>">
+	</div>
+	<div class="form-group">
+		<label for="bankCode">BankCode</label>
+		<input type="text" class="form-control" id="bankCode" name="bankCode" placeholder="bankCode" value="<%= data.model.bankCode%>">
+	</div>
+	<div class="form-group">
+		<label for="bankName">BankName</label>
+		<input type="text" class="form-control" id="bankName" name="bankName" placeholder="bankName" value="<%= data.model.bankName%>">
+	</div>
+	<div class="form-group">
+		<label for="branchCode">BranchCode</label>
+		<input type="text" class="form-control" id="branchCode" name="branchCode" placeholder="branchCode" value="<%= data.model.branchCode%>">
+	</div>
+	<div class="form-group">
+		<label for="branchName">BranchName</label>
+		<input type="text" class="form-control" id="branchName" name="branchName" placeholder="branchName" value="<%= data.model.branchName%>">
+	</div>
+	<div class="form-group">
+		<label for="city">City</label>
+		<input type="text" class="form-control" id="city" name="city" placeholder="city" value="<%= data.model.city%>">
+	</div>
+	<div class="form-group">
+		<label for="subBranchCode">SubBranchCode</label>
+		<input type="text" class="form-control" id="subBranchCode" name="subBranchCode" placeholder="subBranchCode" value="<%= data.model.subBranchCode%>">
+	</div>
+	<div class="form-group">
+		<label for="subBranchName">SubBranchName</label>
+		<input type="text" class="form-control" id="subBranchName" name="subBranchName" placeholder="subBranchName" value="<%= data.model.subBranchName%>">
+	</div>
+	<div class="form-group">
+		<label for="remark">Remark</label>
+		<input type="text" class="form-control" id="remark" name="remark" placeholder="remark" value="<%= data.model.remark%>">
+	</div>
+	<div class="form-group">
+		<label for="createDate">CreateDate</label>
+		<input type="date" class="form-control" id="createDate" name="createDate" placeholder="createDate" value="<%= data.model.createDate%>">
+	</div>
+	<div class="form-group">
+		<label for="createBy">CreateBy</label>
+		<select class="form-control" name="createBy" id="createBy">
+			<option value=""> -- </option>
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="updateDate">UpdateDate</label>
+		<input type="date" class="form-control" id="updateDate" name="updateDate" placeholder="updateDate" value="<%= data.model.updateDate%>">
+	</div>
+	<div class="form-group">
+		<label for="updateBy">UpdateBy</label>
+		<select class="form-control" name="updateBy" id="updateBy">
+			<option value=""> -- </option>
+		</select>
+	</div>
+ <div class="form-group"><button type="submit" class="btn btn-success">Submit</button></div>
+</form>

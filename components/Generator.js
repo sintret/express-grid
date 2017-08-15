@@ -104,7 +104,16 @@ var Generator = function (arr, table, dirRoot) {
         out += "router.get('/create', function (req, res, next) {" + this.newLine;
         out += this.tab + 'res.render("layouts/main", {' + this.newLine;
         out += this.tab + this.tab + 'data: {model:' + this.capitalizeFirstLetter(table) + '.attributeData},' + this.newLine;
-        out += this.tab + this.tab + 'renderBody: "' + table + '/form.ejs"' + this.newLine;
+        out += this.tab + this.tab + 'renderBody: "' + table + '/create.ejs"' + this.newLine;
+        out += this.tab + '});' + this.newLine;
+        out += '});' + this.newLine;
+
+
+        //update controller
+        out += "router.get('/update', function (req, res, next) {" + this.newLine;
+        out += this.tab + 'res.render("layouts/main", {' + this.newLine;
+        out += this.tab + this.tab + 'data: {model:' + this.capitalizeFirstLetter(table) + '.attributeData},' + this.newLine;
+        out += this.tab + this.tab + 'renderBody: "' + table + '/update.ejs"' + this.newLine;
         out += this.tab + '});' + this.newLine;
         out += '});' + this.newLine;
 
@@ -117,6 +126,10 @@ var Generator = function (arr, table, dirRoot) {
     this.outputViewsIndex = function () {
 
         var out = '';
+        out += '<nav class="breadcrumb pull-right">' + this.newLine;
+        out += this.tab + '<a class="breadcrumb-item" href="/">Home</a> /' + this.newLine;
+        out += this.tab + '<span class="breadcrumb-item active">Index</span>' + this.newLine;
+        out += '</nav>' + this.newLine + this.newLine;
         out += '<div class="page-header">' + this.newLine;
         out += this.tab + "<h1><%= title %></h1>" + this.newLine;
         out += "</div>" + this.newLine + this.newLine;
@@ -208,6 +221,12 @@ var Generator = function (arr, table, dirRoot) {
 
         var keys = this.keys();
         var out = '';
+        out += '<nav class="breadcrumb pull-right">' + this.newLine;
+        out += this.tab + '<a class="breadcrumb-item" href="/">Home</a> /' + this.newLine;
+        out += this.tab + '<a class="breadcrumb-item" href="/' + table + '">Index</a> /' + this.newLine;
+        out += this.tab + '<span class="breadcrumb-item active">View</span>' + this.newLine;
+        out += '</nav>' + this.newLine + this.newLine;
+
         out += '<div class="page-header">' + this.newLine;
         out += this.tab + "<h1>" + this.capitalizeFirstLetter(table) + " <%= data.model.id %> </h1>" + this.newLine;
         out += "</div>" + this.newLine + this.newLine;
@@ -232,14 +251,45 @@ var Generator = function (arr, table, dirRoot) {
     }
 
     this.outputViewsCreate = function () {
-
-        var keys = this.keys();
         var out = '';
+        out += '<nav class="breadcrumb pull-right">' + this.newLine;
+        out += this.tab + '<a class="breadcrumb-item" href="/">Home</a> /' + this.newLine;
+        out += this.tab + '<a class="breadcrumb-item" href="/' + table + '">Index</a> /' + this.newLine;
+        out += this.tab + '<span class="breadcrumb-item active">Create Form</span>' + this.newLine;
+        out += '</nav>' + this.newLine + this.newLine;
+
         out += '<div class="page-header">' + this.newLine;
-        out += this.tab + "<h1>" + this.capitalizeFirstLetter(table) + " Form  </h1>" + this.newLine;
+        out += this.tab + "<h3>Create " + this.capitalizeFirstLetter(table) + " Form  </h3>" + this.newLine;
         out += "</div>" + this.newLine + this.newLine;
 
-        out += '<form method="post" action="/' + table + '/create" enctype="multipart/form-data">' + this.newLine;
+        out += '<% include ../' + table + '/form.ejs %>';
+
+        return out;
+    }
+
+    this.outputViewsUpdate = function () {
+        var out = '';
+        out += '<nav class="breadcrumb pull-right">' + this.newLine;
+        out += this.tab + '<a class="breadcrumb-item" href="/">Home</a> /' + this.newLine;
+        out += this.tab + '<a class="breadcrumb-item" href="/' + table + '">Index</a> /' + this.newLine;
+        out += this.tab + '<span class="breadcrumb-item active">Update Form</span>' + this.newLine;
+        out += '</nav>' + this.newLine + this.newLine;
+
+        out += '<div class="page-header">' + this.newLine;
+        out += this.tab + "<h3>Update " + this.capitalizeFirstLetter(table) + " Form  </h3>" + this.newLine;
+        out += "</div>" + this.newLine + this.newLine;
+
+        out += '<% include ../' + table + '/form.ejs %>';
+
+        return out;
+    }
+
+    this.outputViewsForm = function () {
+
+        var keys = this.keys();
+
+        var out = '';
+        out += '<form method="post" action="/' + table + '/create" >' + this.newLine;
 
         var dataFields = this.dataFields();
 
@@ -259,7 +309,7 @@ var Generator = function (arr, table, dirRoot) {
                     j += g.tab + g.tab + '<input type="text" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + key.name + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
 
                 } else if (type.indexOf("TEXT") >= 0) {
-                    j += g.tab +g.tab +  '<textarea class="form-control" id="' + key.name + '" name="' + key.name + '" rows="3"><%= data.model.' + key.name + '%></textarea>' + g.newLine;
+                    j += g.tab + g.tab + '<textarea class="form-control" id="' + key.name + '" name="' + key.name + '" rows="3"><%= data.model.' + key.name + '%></textarea>' + g.newLine;
 
                 } else if (type.indexOf("DATEONLY") >= 0) {
                     j += g.tab + g.tab + '<input type="date" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + key.name + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
@@ -279,7 +329,7 @@ var Generator = function (arr, table, dirRoot) {
 
         });
 
-        out+= ' <div class="form-group"><button type="submit" class="btn btn-success">Submit</button></div>'
+        out += ' <div class="form-group"><button type="submit" class="btn btn-success">Submit</button></div>' + this.newLine;
 
         out += '</form>' + this.newLine;
 
@@ -365,17 +415,38 @@ var Generator = function (arr, table, dirRoot) {
     }
 
     this.structure = function (obj) {
+        var validate = "";
         var s = '';
         var fieldName = this.tab + obj['Field'];
         s += fieldName + ': {';
         s += this.newLine;
-        s += this.getType(obj['Type']) + ',';
+
+        var sType = this.setType(obj['Type']);
+
+        //s += this.getType(obj['Type']) + ',';
+
+        s += this.tab + this.tab + "type: Sequelize." + sType.toUpperCase() + ',';
         if (obj.Null == "NO") {
             s += this.newLine;
             s += this.tab + this.tab + 'allowNull: false,';
         } else {
             s += this.newLine;
             s += this.tab + this.tab + 'allowNull: true,';
+
+            if (obj.Key != "PRI") {
+                validate += "notEmpty: true,";
+            }
+        }
+
+
+        if (sType.indexOf("INTEGER") >= 0 && obj.Key != "PRI") {
+            validate += "isAlphanumeric: true,";
+        }
+
+        if (sType.indexOf("STRING") >= 0) {
+            var numberPattern = /\d+/g;
+            var num = sType.match(numberPattern);
+            validate += "max: " + num + ",";
         }
 
         if (obj.Key == "PRI") {
@@ -391,12 +462,21 @@ var Generator = function (arr, table, dirRoot) {
             s += this.tab + this.tab + 'defaultValue: "' + obj.Default + '",';
         }
 
-        s = s.slice(0, -1);
+        if (validate != "") {
+            validate = validate.slice(0, -1);
+            s += this.newLine;
+            s += this.tab + this.tab + 'validate: {' + validate + '}';
+        }
+
 
         s += this.newLine;
         s += this.tab + '},';
 
         return s;
+    }
+
+    this.validate = function () {
+
     }
 
     this.getType = function (type) {

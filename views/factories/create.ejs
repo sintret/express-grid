@@ -1,6 +1,11 @@
+<nav class="breadcrumb pull-right">
+	<a class="breadcrumb-item" href="/">Home</a> /
+	<a class="breadcrumb-item" href="/factories">Index</a> /
+	<span class="breadcrumb-item active">Create</span>
+</nav>
+
 <div class="page-header">
-	<h1>Factories Form 
+	<h3>Create Factories Form </h3>
 </div>
 
-<form method="post" action="/factories/create" enctype="multipart/form-data">
-<div class="form-group"></div><div class="form-group"></div><div class="form-group"></div><div class="form-group"></div><div class="form-group"></div><div class="form-group"></div><div class="form-group"></div></form>
+<% include ../factories/form.ejs %>

@@ -1,0 +1,55 @@
+<script>
+	$("#jsGrid").jsGrid({
+		width: "100%",
+		filtering: true,
+		inserting: false,
+		editing: true,
+		sorting: false,
+		autoload: true,
+		paging: true,
+		pageLoading: true,
+		css: "kv-grid-table table table-bordered table-striped kv-table-wrap",
+		pageSize: 20,
+		pageButtonCount: 10,
+		deleteConfirm: "Do you really want to delete client?",
+			controller: {
+				loadData: function (filter) {
+					return $.ajax({
+						datatype: "json",
+						type: "GET",
+						url: "/bank/list",
+						data: filter,
+						success: function (html) {
+							var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = "Showing <b>"; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");
+						}
+					});
+				},
+				updateItem: function (item) {return $.ajax({type: "PUT",url: "/bank",data: item});},
+				deleteItem: function (item) {return $.ajax({type: "DELETE",url: "/bank",data: item});}
+			},
+			fields: [
+				{name:"swiftCode", title:"SwiftCode", type: "text", width: 90},
+				{name:"bankCode", title:"BankCode", type: "text", width: 90},
+				{name:"bankName", title:"BankName", type: "text", width: 90},
+				{name:"branchCode", title:"BranchCode", type: "text", width: 90},
+				{name:"branchName", title:"BranchName", type: "text", width: 90},
+				{name:"city", title:"City", type: "text", width: 90},
+				{name:"subBranchCode", title:"SubBranchCode", type: "text", width: 90},
+				{name:"subBranchName", title:"SubBranchName", type: "text", width: 90},
+				{name:"remark", title:"Remark", type: "text", width: 90},
+				{name:"createDate", title:"CreateDate", type: "text", width: 90},
+				{name:"createBy", title:"CreateBy", type: "text", width: 90},
+				{name:"updateDate", title:"UpdateDate", type: "text", width: 90},
+				{name:"updateBy", title:"UpdateBy", type: "text", width: 90},
+				{type: "control", width: 100, editButton: false,
+				itemTemplate: function (value, item) {
+					var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+					var $customViewButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class='glyphicon glyphicon-eye-open'></span>").click(function (e) {location.href = "/bank/view/" + item.id; e.stopPropagation();});
+					var $customEditButton = $("<button>").attr({class: "btn btn-success btn-xs"}).html("<span class='glyphicon glyphicon-pencil'></span>").click(function (e) {location.href = "/bank/update/" + item.id; e.stopPropagation();});
+					var $customDeleteButton = $("<button>").attr({class: "btn btn-danger btn-xs"}).html("<span class='glyphicon glyphicon-trash'></span>").click(function (e) { if(window.confirm("delete selected data ?")){$.ajax({url:"/bank/"+item.id,type:"DELETE",data:{id:item.id},success:function(data){location.href="";}});};e.stopPropagation();});
+					return $("<div>").append($customViewButton).append("   ").append($customEditButton).append("    ").append($customDeleteButton);
+					}
+				}
+			]
+		});
+</script>

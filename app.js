@@ -4,6 +4,9 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var expressSession = require('express-session');
+var Multer = require('multer');
+const sharp = require('sharp');
 //get absolute path
 global.appRoot = path.resolve(__dirname);
 
@@ -17,10 +20,32 @@ app.set('view engine', 'ejs');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.set('trust proxy', 1); // trust first proxy
+var session = expressSession({
+    secret: 'gstartupProject',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {maxAge: 2 * 24 * 60 * 60 * 1000, httpOnly: false}
+});
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components', express.static(path.join(__dirname, 'bower_components')));
+app.use(session);
+
+var storage = Multer.diskStorage({
+    destination: function (req, file, callback) {
+    callback(null, './uploads');
+    },
+    filename : function(req,file,callback) {
+        callback(null, file.fieldname + '-' + Date.now());
+
+    }
+});
+
+var upload = Multer({storage: storage}).single('songUpload');
+
 
 app.use(function (req, res, next) {
     // if there's a flash message in the session request, make it available in the response, then delete it
@@ -29,18 +54,20 @@ app.use(function (req, res, next) {
     res.locals.data = "";
     res.locals.title = "my app";
 
+    console.log(JSON.stringify(req.body));
+
     next();
 });
 
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
-app.use('/banks', require('./routes/banks'));
 app.use('/generator', require('./routes/generator'));
 app.use('/company', require('./routes/company'));
 app.use('/employee', require('./routes/employee'));
 app.use('/member', require('./routes/member'));
 app.use('/factories', require('./routes/factories'));
 app.use('/department', require('./routes/department'));
+app.use('/bank', require('./routes/bank'));
 
 /*
  app.use('/php', require('./routes/php'));

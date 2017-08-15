@@ -11,12 +11,15 @@
     "debug": "~2.6.3",
     "ejs": "~2.5.6",
     "express": "~4.15.2",
+    "express-session": "^1.15.5",
     "mkdirp": "^0.5.1",
     "morgan": "~1.8.1",
+    "multer": "^1.3.0",
     "mysql": "^2.14.1",
     "mysql2": "^1.4.0",
     "sequelize": "^4.4.2",
     "sequelize-auto": "^0.4.28",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "sharp": "^0.18.2"
   }
 }

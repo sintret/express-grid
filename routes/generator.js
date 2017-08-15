@@ -68,10 +68,22 @@ router.post('/', function (req, res, next) {
                     }
                 });
 
-                var create = dirViews + "/form.ejs";
+                var create = dirViews + "/create.ejs";
                 fs.writeFile(create, g.outputViewsCreate(), function (err) {
                     if (err) {
                         return console.log(g.outputViewsCreate());
+                    }
+                });
+                var update = dirViews + "/update.ejs";
+                fs.writeFile(update, g.outputViewsUpdate(), function (err) {
+                    if (err) {
+                        return console.log(g.outputViewsUpdate());
+                    }
+                });
+                var form = dirViews + "/form.ejs";
+                fs.writeFile(form, g.outputViewsForm(), function (err) {
+                    if (err) {
+                        return console.log(g.outputViewsForm());
                     }
                 });
             }
