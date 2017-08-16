@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var Faq = require('./../models/faq');
+var Util = require('./../components/Util');
+var Excel = require('exceljs');
 
 /* GET faq listing. */
 router.get('/', function (req, res, next) {
@@ -78,4 +80,36 @@ router.post('/update/:id', function (req, res, next) {
 		});
 	});
 
+router.get('/excel', function (req, res, next) {
+
+	var workbook = new Excel.Workbook();
+	var worksheet = workbook.addWorksheet('Faq', {pageSetup: {paperSize: 9, orientation: 'landscape'}});
+	var sequence = Util.excelSequence();
+	var fields = Faq.keys;
+	var start = 3, num = 1;
+
+	worksheet.getCell('A1').value = '#';
+
+	Faq.findAll().then(function (models) {
+
+		for (var i = 0; i < fields.length; i++) {
+			var j = i + 1;
+			worksheet.getCell(sequence[j] + '1').value = Util.capitalizeFirstLetter(fields[i]);
+		}
+
+		models.forEach(function (result) {
+			for (var i = 0; i < fields.length; i++) {
+				var j = i + 1;
+				worksheet.getCell('A' + start).value = num;
+				worksheet.getCell(sequence[j] + start).value = result[fields[i]];
+			}
+			start++;
+			num++
+		});
+
+		var filePath = appRoot + '/temp/';
+		var fileName = 'faq.xlsx';
+		workbook.xlsx.writeFile(filePath + fileName).then(function () {res.download(filePath + fileName);});
+	}).catch(function (err) {res.json(err);});
+});
 module.exports = router;

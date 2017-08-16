@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Bank = require('./../models/bank');
 var Util = require('./../components/Util');
-
+var Excel = require('exceljs');
 /* GET bank listing. */
 router.get('/', function (req, res, next) {
     res.render("layouts/main", {
@@ -76,22 +76,14 @@ router.post('/update/:id', function (req, res, next) {
     });
 });
 router.get('/excel', function (req, res, next) {
-    var Excel = require('exceljs');
+
     var workbook = new Excel.Workbook();
-
-    var worksheet = workbook.addWorksheet('Bank', {
-        pageSetup: {paperSize: 9, orientation: 'landscape'}
-    });
-
+    var worksheet = workbook.addWorksheet('Bank', {pageSetup: {paperSize: 9, orientation: 'landscape'}});
     var sequence = Util.excelSequence();
-
     var fields = Bank.keys;
+    var start = 3, num = 1;
+
     worksheet.getCell('A1').value = 'No.';
-
-    var start = 3;
-    var num = 1;
-
-
     Bank.findAll().then(function (models) {
 
         for (var i = 0; i < fields.length; i++) {
@@ -100,29 +92,18 @@ router.get('/excel', function (req, res, next) {
         }
 
         models.forEach(function (result) {
-
-
             for (var i = 0; i < fields.length; i++) {
                 var j = i + 1;
                 worksheet.getCell('A' + start).value = num;
                 worksheet.getCell(sequence[j] + start).value = result[fields[i]];
             }
-
             start++;
             num++;
         });
+        
+        var filePath = appRoot + '/temp/';
+        var fileName = 'Bank.xlsx';
 
-
-        var filePath = appRoot + '/temp/'; // Or format the path using the `id` rest param
-        var fileName = 'test.xlsx';
-
-        workbook.xlsx.writeFile(filePath + fileName)
-            .then(function () {
-                // done
-                res.download(filePath + fileName);
-            });
-    }).catch(function (err) {
-        console.log(err);
-    });
+        workbook.xlsx.writeFile(filePath + fileName).then(function () {res.download(filePath + fileName);});}).catch(function (err) {res.json(err);});
 });
 module.exports = router;

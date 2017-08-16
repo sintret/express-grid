@@ -76,7 +76,10 @@ var Generator = function (arr, table, dirRoot) {
         var out = '';
         out += "var express = require('express');" + this.newLine;
         out += "var router = express.Router();" + this.newLine;
-        out += "var " + this.capitalizeFirstLetter(table) + " = require('./../models/" + table + "');" + this.newLine + this.newLine
+        out += "var " + this.capitalizeFirstLetter(table) + " = require('./../models/" + table + "');" + this.newLine
+        out += "var Util = require('./../components/Util');"+ this.newLine
+        out += "var Excel = require('exceljs');" + this.newLine + this.newLine
+
         out += "/* GET " + table + " listing. */" + this.newLine;
 
         //index controller
@@ -164,6 +167,34 @@ var Generator = function (arr, table, dirRoot) {
         out +=  this.tab + '});' + this.newLine+ this.newLine;
 
 
+        //download excel file via grid
+        out +=  "router.get('/excel', function (req, res, next) {" + this.newLine + this.newLine;
+        out +=  this.tab + "var workbook = new Excel.Workbook();" +this.newLine;
+        out +=  this.tab + "var worksheet = workbook.addWorksheet('"+this.capitalizeFirstLetter(table)+"', {pageSetup: {paperSize: 9, orientation: 'landscape'}});" +this.newLine;
+        out +=  this.tab + "var sequence = Util.excelSequence();" +this.newLine;
+        out +=  this.tab + "var fields = "+this.capitalizeFirstLetter(table)+".keys;" +this.newLine;
+        out +=  this.tab + "var start = 3, num = 1;" + this.newLine + this.newLine;
+        out +=  this.tab + "worksheet.getCell('A1').value = '#';" + this.newLine + this.newLine;
+        out +=  this.tab + this.capitalizeFirstLetter(table)+".findAll().then(function (models) {" + this.newLine + this.newLine;
+        out +=  this.tab + this.tab + "for (var i = 0; i < fields.length; i++) {" +this.newLine;
+        out +=  this.tab + this.tab + this.tab + "var j = i + 1;" +this.newLine;
+        out +=  this.tab + this.tab + this.tab + "worksheet.getCell(sequence[j] + '1').value = Util.capitalizeFirstLetter(fields[i]);" +this.newLine;
+        out +=  this.tab + this.tab + "}" + this.newLine + this.newLine;
+        out +=  this.tab + this.tab + "models.forEach(function (result) {" +this.newLine;
+        out +=  this.tab + this.tab + this.tab + "for (var i = 0; i < fields.length; i++) {" +this.newLine;
+        out +=  this.tab + this.tab + this.tab + this.tab + "var j = i + 1;" +this.newLine;
+        out +=  this.tab + this.tab + this.tab + this.tab + "worksheet.getCell('A' + start).value = num;" +this.newLine;
+        out +=  this.tab + this.tab + this.tab + this.tab + "worksheet.getCell(sequence[j] + start).value = result[fields[i]];" +this.newLine;
+        out +=  this.tab + this.tab + this.tab + "}" +this.newLine;
+        out +=  this.tab + this.tab + this.tab + "start++;" +this.newLine;
+        out +=  this.tab + this.tab + this.tab + "num++" +this.newLine;
+        out +=  this.tab + this.tab + "});" +this.newLine +this.newLine;
+        out +=  this.tab + this.tab + "var filePath = appRoot + '/temp/';" +this.newLine;
+        out +=  this.tab + this.tab + "var fileName = '"+table+".xlsx';" +this.newLine;
+        out +=  this.tab + this.tab + "workbook.xlsx.writeFile(filePath + fileName).then(function () {res.download(filePath + fileName);});" +this.newLine;
+        out +=  this.tab + "}).catch(function (err) {res.json(err);});" +this.newLine;
+        out +=  "});" +this.newLine;
+
         out += "module.exports = router;" + this.newLine;
 
         return out;
@@ -193,7 +224,7 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + this.tab + this.tab + this.tab + '<div class="btn-group">' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + '<a type="button" id="create_btn" class="btn btn-success"href="/' + table + '/create" title="Add Data"><i class="glyphicon glyphicon-plus"></i></a>' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + '<a type="button" class="btn btn-warning" href="/' + table + '/parsing" title="Import Excel"><i class="fa fa-file-excel-o"></i></a>' + this.newLine;
-        out += this.tab + this.tab + this.tab + this.tab + '<button type="button" id="backupExcel" class="btn btn-default" title="Excel Backup"><i class="fa fa-download"></i></button>' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + '<a type="button" id="backupExcel" href="/'+table+'/excel" class="btn btn-default" title="Excel Backup"><i class="fa fa-download"></i></a>' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + '<a class="btn btn-default" href="/' + table + '" title="Refresh Grid" ><i class="glyphicon glyphicon-repeat"></i></a></div>' + this.newLine;
         out += this.tab + this.tab + this.tab + '</div>' + this.newLine;
         out += this.tab + this.tab + '</div>' + this.newLine;
@@ -449,7 +480,7 @@ var Generator = function (arr, table, dirRoot) {
 
             obj.push(t);
         }
-        
+
         return obj;
     }
 
