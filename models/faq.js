@@ -51,6 +51,9 @@ model.getGridFilter = function (query, callback) {
 	var limit = parseInt(query.pageSize || 20);
 	var pageIndex = parseInt(query.pageIndex) || 1;
 	var offset = limit * (pageIndex - 1);
+	var sortField = query.sortField || "id";
+	var sortOrder = query.sortOrder || "DESC";
+	sortOrder = sortOrder.toUpperCase();
 
 	var keys = model.keys;
 	var o = {};
@@ -58,6 +61,8 @@ model.getGridFilter = function (query, callback) {
 	o.attributes = keys ;
 	o.limit = limit;
 	o.offset =offset;
+
+	o.order = [[sortField,sortOrder]];
 
 	if (query) {
 		for (var q in query) {

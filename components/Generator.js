@@ -215,7 +215,7 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + this.tab + 'filtering: true,' + this.newLine;
         out += this.tab + this.tab + 'inserting: false,' + this.newLine;
         out += this.tab + this.tab + 'editing: true,' + this.newLine;
-        out += this.tab + this.tab + 'sorting: false,' + this.newLine;
+        out += this.tab + this.tab + 'sorting: true,' + this.newLine;
         out += this.tab + this.tab + 'autoload: true,' + this.newLine;
         out += this.tab + this.tab + 'paging: true,' + this.newLine;
         out += this.tab + this.tab + 'pageLoading: true,' + this.newLine;
@@ -449,8 +449,7 @@ var Generator = function (arr, table, dirRoot) {
 
             obj.push(t);
         }
-
-
+        
         return obj;
     }
 
@@ -463,13 +462,17 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + 'var s = {};' + this.newLine;
         out += this.tab + 'var limit = parseInt(query.pageSize || 20);' + this.newLine;
         out += this.tab + 'var pageIndex = parseInt(query.pageIndex) || 1;' + this.newLine;
-        out += this.tab + 'var offset = limit * (pageIndex - 1);' + this.newLine + this.newLine;
+        out += this.tab + 'var offset = limit * (pageIndex - 1);' + this.newLine;
+        out += this.tab + 'var sortField = query.sortField || "id";' + this.newLine;
+        out += this.tab + 'var sortOrder = query.sortOrder || "DESC";' + this.newLine;
+        out += this.tab + 'sortOrder = sortOrder.toUpperCase();' + this.newLine + this.newLine;
         out += this.tab + 'var keys = model.keys;' + this.newLine;
         out += this.tab + 'var o = {};' + this.newLine;
         out += this.tab + 'o.raw = true;' + this.newLine;
         out += this.tab + 'o.attributes = keys ;' + this.newLine;
         out += this.tab + 'o.limit = limit;' + this.newLine;
         out += this.tab + 'o.offset =offset;' + this.newLine + this.newLine;
+        out += this.tab + 'o.order = [[sortField,sortOrder]];' + this.newLine + this.newLine;
         out += this.tab + 'if (query) {' + this.newLine;
         out += this.tab + this.tab + 'for (var q in query) {' + this.newLine;
         out += this.tab + this.tab + this.tab + 'var a = keys.indexOf(q);' + this.newLine;
