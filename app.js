@@ -68,6 +68,7 @@ app.use('/member', require('./routes/member'));
 app.use('/factories', require('./routes/factories'));
 app.use('/department', require('./routes/department'));
 app.use('/bank', require('./routes/bank'));
+app.use('/faq', require('./routes/faq'));
 
 /*
  app.use('/php', require('./routes/php'));

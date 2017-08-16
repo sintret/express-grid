@@ -18,8 +18,6 @@ var Generator = function (arr, table, dirRoot) {
     table = table || "";
     dirRoot = dirRoot || "";
 
-    var objectAndType = [];
-
     this.tab = '\t';
     this.newLine = '\r\n';
     this.spaces = '   ';
@@ -30,22 +28,25 @@ var Generator = function (arr, table, dirRoot) {
             return '';
         }
 
+        var keys = this.keys();
+        var obj = {}
         var out = '';
-        out += "const Sequelize = require('sequelize');";
-        out += this.newLine;
-        out += "var sequelize = require('./config.js');";
-        out += this.newLine;
-        out += this.attributeData();
+        out += "const Sequelize = require('sequelize');" +this.newLine;
+        out += "var sequelize = require('./config.js');"+this.newLine;
+        out += this.attributeData()+this.newLine+this.newLine;
 
-        out += this.newLine + this.newLine;
-        out += 'var model = sequelize.define("' + table + '", attributeData, {';
-        out += this.newLine + this.tab + 'timestamps: false';
+        out += 'var model = sequelize.define("' + table + '", attributeData, {'+this.newLine;
+        out += this.tab + 'timestamps: false'+this.newLine;
+        out += '});'+this.newLine;
+        out += 'model.attributeData = ' + JSON.stringify(this.obj()).replace(/"/g, '') + ';'+this.newLine;
+        out += 'model.keys = ' + JSON.stringify(keys) + ';'+this.newLine;
+
+        for(var property in this.obj()){
+            obj[property]=null;
+        }
+
+        out += 'model.newEmpty = ' + JSON.stringify(obj).replace(/"/g, '') + ';';
         out += this.newLine;
-        out += '});';
-        out += this.newLine;
-        out += 'model.attributeData = ' + JSON.stringify(this.obj()).replace(/"/g, '') + ';';
-        out += this.newLine;
-        out += 'model.keys = ' + JSON.stringify(this.keys()) + ';';
         out += this.newLine + this.newLine;
         out += this.grid();
         out += this.newLine;
@@ -75,24 +76,24 @@ var Generator = function (arr, table, dirRoot) {
         var out = '';
         out += "var express = require('express');" + this.newLine;
         out += "var router = express.Router();" + this.newLine;
-        out += "var " + this.capitalizeFirstLetter(table) + " = require('./../models/" + table + ".js');" + this.newLine + this.newLine
+        out += "var " + this.capitalizeFirstLetter(table) + " = require('./../models/" + table + "');" + this.newLine + this.newLine
         out += "/* GET " + table + " listing. */" + this.newLine;
 
         //index controller
         out += "router.get('/', function (req, res, next) {" + this.newLine;
         out += this.tab + 'res.render("layouts/main", {' + this.newLine;
-        out += this.tab + this.tab + 'data: {table:"' + table + '"},' + this.newLine;
+        out += this.tab + this.tab + 'data: {table:"' + table + '", attributeData:' + this.capitalizeFirstLetter(table) + '.attributeData},' + this.newLine;
         out += this.tab + this.tab + 'renderBody: "' + table + '/index.ejs",' + this.newLine;
         out += this.tab + this.tab + 'renderEnd: "' + table + '/grid.ejs"' + this.newLine;
         out += this.tab + '});' + this.newLine;
-        out += '});' + this.newLine;
+        out += '});' + this.newLine+ this.newLine;
 
         //list via grid controller / load data
         out += "router.get('/list', function (req, res, next) {" + this.newLine;
         out += this.tab + this.capitalizeFirstLetter(table) + ".getGridFilter(req.query).then(function (items) {" + this.newLine;
         out += this.tab + this.tab + "res.json(items);" + this.newLine;
         out += this.tab + "});" + this.newLine;
-        out += "});" + this.newLine;
+        out += "});" + this.newLine+ this.newLine;
 
         //delete controller
         out += "router.delete('/:id', function (req, res, next) {" + this.newLine;
@@ -101,25 +102,25 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + "}).then(function (deletedOwner) {" + this.newLine;
         out += this.tab + this.tab + "res.json(deletedOwner);" + this.newLine;
         out += this.tab + "});" + this.newLine;
-        out += "});" + this.newLine;
+        out += "});" + this.newLine+ this.newLine;
 
         //view controller
         out += "router.get('/view/:id', function (req, res, next) {" + this.newLine;
         out += this.tab + this.capitalizeFirstLetter(table) + ".findById(req.params.id).then(function (model) {" + this.newLine;
         out += this.tab + this.tab + 'res.render("layouts/main", {' + this.newLine;
-        out += this.tab + this.tab + this.tab + "data: {model:model}," + this.newLine;
+        out += this.tab + this.tab + this.tab + 'data: {model:model, attributeData: ' + this.capitalizeFirstLetter(table) + '.attributeData},' + this.newLine;
         out += this.tab + this.tab + this.tab + 'renderBody: "' + table + '/view.ejs"' + this.newLine;
         out += this.tab + this.tab + '});' + this.newLine;
         out += this.tab + '});' + this.newLine;
-        out += '});' + this.newLine;
+        out += '});' + this.newLine+ this.newLine;
 
         //create controller
         out += "router.get('/create', function (req, res, next) {" + this.newLine;
         out += this.tab + 'res.render("layouts/main", {' + this.newLine;
-        out += this.tab + this.tab + 'data: {model:' + this.capitalizeFirstLetter(table) + '.attributeData},' + this.newLine;
+        out += this.tab + this.tab + 'data: {model:' + this.capitalizeFirstLetter(table) + '.newEmpty, attributeData: ' + this.capitalizeFirstLetter(table) + '.attributeData},' + this.newLine;
         out += this.tab + this.tab + 'renderBody: "' + table + '/create.ejs"' + this.newLine;
         out += this.tab + '});' + this.newLine;
-        out += '});' + this.newLine;
+        out += '});' + this.newLine+ this.newLine;
 
         //post create controller
         out += "router.post('/create', function (req, res, next) {" + this.newLine ;
@@ -128,22 +129,22 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + '}).catch(function (err) {' + this.newLine;
         out += this.tab + this.tab + 'res.json(err);' + this.newLine;
         out += this.tab + '});' + this.newLine;
-        out += '});' + this.newLine;
+        out += '});' + this.newLine+ this.newLine;
 
 
         //update controller
         out += "router.get('/update/:id', function (req, res, next) {" + this.newLine;
         out += this.tab + this.capitalizeFirstLetter(table) + '.findById(req.params.id).then(function (model) {' + this.newLine;
         out += this.tab + this.tab + 'res.render("layouts/main", {' + this.newLine;
-        out += this.tab + this.tab + this.tab + 'data: {model: model},' + this.newLine;
-        out += this.tab + this.tab + this.tab + 'renderBody: "bank/update.ejs"' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'data: {model: model, attributeData: ' + this.capitalizeFirstLetter(table) + '.attributeData},' + this.newLine;
+        out += this.tab + this.tab + this.tab + 'renderBody: "'+table+'/update.ejs"' + this.newLine;
         out += this.tab + this.tab + '});' + this.newLine;
         out += this.tab + '}).catch(function (error) {' + this.newLine;
         out += this.tab + this.tab + 'var data = {}' + this.newLine;
         out += this.tab + this.tab + 'data.status = 0; data.data = error;' + this.newLine;
         out += this.tab + this.tab + 'res.json(data);' + this.newLine;
         out += this.tab + '});' + this.newLine;
-        out += '});' + this.newLine;
+        out += '});' + this.newLine+ this.newLine;
 
         //post update controller
         out += "router.post('/update/:id', function (req, res, next) {" + this.newLine ;
@@ -160,7 +161,7 @@ var Generator = function (arr, table, dirRoot) {
         out +=  this.tab + this.tab + 'data.status = 0; data.data = error;' + this.newLine;
         out +=  this.tab + this.tab + 'res.json(data);' + this.newLine;
         out +=  this.tab + this.tab + '});' + this.newLine;
-        out +=  this.tab + '});' + this.newLine;
+        out +=  this.tab + '});' + this.newLine+ this.newLine;
 
 
         out += "module.exports = router;" + this.newLine;
@@ -208,6 +209,7 @@ var Generator = function (arr, table, dirRoot) {
     this.outputViewsGrid = function () {
 
         var out = '<script>' + this.newLine;
+        out += this.tab + 'var attributeData = <%- JSON.stringify(data.attributeData) %>;' + this.newLine;
         out += this.tab + '$("#jsGrid").jsGrid({' + this.newLine;
         out += this.tab + this.tab + 'width: "100%",' + this.newLine;
         out += this.tab + this.tab + 'filtering: true,' + this.newLine;
@@ -241,7 +243,7 @@ var Generator = function (arr, table, dirRoot) {
         var keys = this.keys();
         for (var i = 0; i < keys.length; i++) {
             if (keys[i] != "id")
-                out += this.tab + this.tab + this.tab + this.tab + '{name:"' + keys[i] + '", title:"' + this.capitalizeFirstLetter(keys[i]) + '", type: "text", width: 90},' + this.newLine;
+                out += this.tab + this.tab + this.tab + this.tab + '{name : "' + keys[i] + '", title : attributeData.' + keys[i] + ', type: "text", width: 90},' + this.newLine;
         }
         out += this.tab + this.tab + this.tab + this.tab + '{type: "control", width: 100, editButton: false,' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + 'itemTemplate: function (value, item) {' + this.newLine;
@@ -282,10 +284,10 @@ var Generator = function (arr, table, dirRoot) {
         for (var i = 0; i < keys.length; i++) {
             out += this.tab + this.tab + '<tr>' + this.newLine;
             out += this.tab + this.tab + this.tab + '<th>' + this.newLine;
-            out += this.tab + this.tab + this.tab + this.capitalizeFirstLetter(keys[i]) + this.newLine;
+            out += this.tab + this.tab + this.tab + '<%= data.attributeData.' + keys[i] + ' %>' + this.newLine;
             out += this.tab + this.tab + this.tab + '</th>' + this.newLine;
             out += this.tab + this.tab + this.tab + '<td>' + this.newLine;
-            out += this.tab + this.tab + this.tab + '<%= data.model.' + keys[i] + ' %>' + this.newLine;
+            out += this.tab + this.tab + this.tab + '<%- data.model.' + keys[i] + ' %>' + this.newLine;
             out += this.tab + this.tab + this.tab + '</td>' + this.newLine;
             out += this.tab + this.tab + '</tr>' + this.newLine;
         }
@@ -344,26 +346,26 @@ var Generator = function (arr, table, dirRoot) {
                 var g = new Generator();
 
                 var j = g.tab + '<div class="form-group div'+key.name+'">' + g.newLine;
-                j += g.tab + g.tab + '<label for="' + key.name + '">' + g.capitalizeFirstLetter(key.name) + '</label>' + g.newLine;
+                j += g.tab + g.tab + '<label for="' + key.name + '"><%= data.attributeData.' + key.name + ' %></label>' + g.newLine;
                 if (type.indexOf("INTEGER") >= 0) {
                     j += g.tab + g.tab + '<select class="form-control" name="' + key.name + '" id="' + key.name + '">' + g.newLine;
                     j += g.tab + g.tab + g.tab + '<option value=""> -- </option>' + g.newLine;
                     j += g.tab + g.tab + '</select>' + g.newLine;
 
                 } else if (type.indexOf("STRING") >= 0) {
-                    j += g.tab + g.tab + '<input type="text" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + key.name + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
+                    j += g.tab + g.tab + '<input type="text" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + g.capitalizeFirstLetter(key.name) + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
 
                 } else if (type.indexOf("TEXT") >= 0) {
-                    j += g.tab + g.tab + '<textarea class="form-control" id="' + key.name + '" name="' + key.name + '" rows="3"><%= data.model.' + key.name + '%></textarea>' + g.newLine;
+                    j += g.tab + g.tab + '<textarea class="form-control" id="' + key.name + '" name="' + key.name + '" rows="3"><%- data.model.' + key.name + '%></textarea>' + g.newLine;
 
                 } else if (type.indexOf("DATEONLY") >= 0) {
-                    j += g.tab + g.tab + '<input type="date" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + key.name + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
+                    j += g.tab + g.tab + '<input type="date" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + g.capitalizeFirstLetter(key.name) + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
 
                 } else if (type.indexOf("DATE") >= 0) {
-                    j += g.tab + g.tab + '<input type="date" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + key.name + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
+                    j += g.tab + g.tab + '<input type="date" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + g.capitalizeFirstLetter(key.name) + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
 
                 } else {
-                    j += g.tab + g.tab + '<input type="text" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + key.name + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
+                    j += g.tab + g.tab + '<input type="text" class="form-control" id="' + key.name + '" name="' + key.name + '" placeholder="' + g.capitalizeFirstLetter(key.name) + '" value="<%= data.model.' + key.name + '%>">' + g.newLine;
 
                 }
                 j += g.tab + '</div>' + g.newLine;
@@ -548,15 +550,10 @@ var Generator = function (arr, table, dirRoot) {
             s += this.tab + this.tab + 'validate: {' + validate + '}';
         }
 
-
         s += this.newLine;
         s += this.tab + '},';
 
         return s;
-    }
-
-    this.validate = function () {
-
     }
 
     this.getType = function (type) {
@@ -591,7 +588,7 @@ var Generator = function (arr, table, dirRoot) {
         var keys = this.keys();
         var obj = {}
         for (var i = 0; i < keys.length; i++) {
-            obj[keys[i]] = null;
+            obj[keys[i]] = "'"+this.capitalizeFirstLetter(keys[i])+"'";
         }
 
         return obj;

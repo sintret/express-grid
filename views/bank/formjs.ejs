@@ -1,25 +1,25 @@
 <script>
-	var form = document.getElementById("bank-form");
-	form.onsubmit = function (ev) {
-		ev.preventDefault();
-		var url = window.location.pathname;
-		$.ajax({
-			type: 'POST',
-			url: url,
-			data: $(this).serialize(),
-			success: function (data) {
-				if (data.status == 1) {
-					location.href = "/bank/view/" + data.data.id;
-				} else {
-			var errors = data.data.errors;
-			for (i = 0; i < errors.length; i++) {
-				var path = errors[i]['path'];
-				var message = errors[i]['message'];
-				$('.div'+path).addClass('has-error');
-				$('.div'+path).append('<div class="help-block">' + message + '</div>');
-			}
-		}
-	}
-});
-}
+    var form = document.getElementById("bank-form");
+    form.onsubmit = function (ev) {
+        ev.preventDefault();
+        var url = window.location.pathname;
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: $(this).serialize(),
+            success: function (data) {
+                if (data.status == 1) {
+                    location.href = "/bank/view/" + data.data.id;
+                } else {
+                    var errors = data.data.errors;
+                    for (i = 0; i < errors.length; i++) {
+                        var path = errors[i]['path'];
+                        var message = errors[i]['message'];
+                        $('.div' + path).addClass('has-error');
+                        $('.div' + path).append('<div class="help-block">' + message + '</div>');
+                    }
+                }
+            }
+        });
+    }
 </script>

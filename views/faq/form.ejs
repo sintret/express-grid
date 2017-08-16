@@ -1,0 +1,33 @@
+<form id="faq-form" method="post" action="/faq/create" >
+	<div class="form-group divtitle">
+		<label for="title"><%= data.attributeData.title %></label>
+		<input type="text" class="form-control" id="title" name="title" placeholder="Title" value="<%= data.model.title%>">
+	</div>
+	<div class="form-group divdescription">
+		<label for="description"><%= data.attributeData.description %></label>
+		<input type="text" class="form-control" id="description" name="description" placeholder="Description" value="<%= data.model.description%>">
+	</div>
+	<div class="form-group divcreateDate">
+		<label for="createDate"><%= data.attributeData.createDate %></label>
+		<input type="date" class="form-control" id="createDate" name="createDate" placeholder="CreateDate" value="<%= data.model.createDate%>">
+	</div>
+	<div class="form-group divcreateBy">
+		<label for="createBy"><%= data.attributeData.createBy %></label>
+		<select class="form-control" name="createBy" id="createBy">
+			<option value=""> -- </option>
+		</select>
+	</div>
+	<div class="form-group divupdateDate">
+		<label for="updateDate"><%= data.attributeData.updateDate %></label>
+		<input type="date" class="form-control" id="updateDate" name="updateDate" placeholder="UpdateDate" value="<%= data.model.updateDate%>">
+	</div>
+	<div class="form-group divupdateBy">
+		<label for="updateBy"><%= data.attributeData.updateBy %></label>
+		<select class="form-control" name="updateBy" id="updateBy">
+			<option value=""> -- </option>
+		</select>
+	</div>
+ <div class="form-group"><button id="faq-submit" type="submit" class="btn btn-success">Submit</button></div>
+</form>
+
+<% include formjs.ejs %>
