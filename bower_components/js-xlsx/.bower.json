@@ -1,0 +1,33 @@
+{
+  "name": "js-xlsx",
+  "homepage": "https://github.com/SheetJS/js-xlsx",
+  "main": "dist/xlsx.core.min.js",
+  "ignore": [
+    "bin",
+    "bits",
+    "misc",
+    "**/.*"
+  ],
+  "keywords": [
+    "excel",
+    "xls",
+    "xml",
+    "xlsx",
+    "xlsm",
+    "xlsb",
+    "ods",
+    "js-xls",
+    "js-xlsx"
+  ],
+  "version": "0.11.2",
+  "_release": "0.11.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.11.2",
+    "commit": "5b67ac0806337135096c9e28330a65270d76fd4a"
+  },
+  "_source": "https://github.com/SheetJS/js-xlsx.git",
+  "_target": "^0.11.2",
+  "_originalSource": "js-xlsx",
+  "_direct": true
+}
