@@ -1,26 +1,26 @@
 var express = require('express');
 var router = express.Router();
-var Faq = require('./../models/faq');
+var Designation = require('./../models/designation');
 var Util = require('./../components/Util');
 var Excel = require('exceljs');
 
-/* GET faq listing. */
+/* GET designation listing. */
 router.get('/', function (req, res, next) {
 	res.render("layouts/main", {
-		data: {table:"faq", attributeData:Faq.attributeData},
-		renderBody: "faq/index.ejs",
-		renderEnd: "faq/grid.ejs"
+		data: {table:"designation", attributeData:Designation.attributeData},
+		renderBody: "designation/index.ejs",
+		renderEnd: "designation/grid.ejs"
 	});
 });
 
 router.get('/list', function (req, res, next) {
-	Faq.getGridFilter(req.query).then(function (items) {
+	Designation.getGridFilter(req.query).then(function (items) {
 		res.json(items);
 	});
 });
 
 router.delete('/:id', function (req, res, next) {
-	Faq.destroy({
+	Designation.destroy({
 		where: {id: req.params.id}
 	}).then(function (deletedOwner) {
 		res.json(deletedOwner);
@@ -28,23 +28,23 @@ router.delete('/:id', function (req, res, next) {
 });
 
 router.get('/view/:id', function (req, res, next) {
-	Faq.findById(req.params.id).then(function (model) {
+	Designation.findById(req.params.id).then(function (model) {
 		res.render("layouts/main", {
-			data: {model:model, attributeData: Faq.attributeData},
-			renderBody: "faq/view.ejs"
+			data: {model:model, attributeData: Designation.attributeData},
+			renderBody: "designation/view.ejs"
 		});
 	});
 });
 
 router.get('/create', function (req, res, next) {
 	res.render("layouts/main", {
-		data: {model:Faq.newEmpty, attributeData: Faq.attributeData},
-		renderBody: "faq/create.ejs"
+		data: {model:Designation.newEmpty, attributeData: Designation.attributeData},
+		renderBody: "designation/create.ejs"
 	});
 });
 
 router.post('/create', function (req, res, next) {
-	Faq.insertData(req.body).then(function (data) {
+	Designation.insertData(req.body).then(function (data) {
 		res.json(data);
 	}).catch(function (err) {
 		res.json(err);
@@ -52,10 +52,10 @@ router.post('/create', function (req, res, next) {
 });
 
 router.get('/update/:id', function (req, res, next) {
-	Faq.findById(req.params.id).then(function (model) {
+	Designation.findById(req.params.id).then(function (model) {
 		res.render("layouts/main", {
-			data: {model: model, attributeData: Faq.attributeData},
-			renderBody: "faq/update.ejs"
+			data: {model: model, attributeData: Designation.attributeData},
+			renderBody: "designation/update.ejs"
 		});
 	}).catch(function (error) {
 		var data = {}
@@ -66,7 +66,7 @@ router.get('/update/:id', function (req, res, next) {
 
 router.post('/update/:id', function (req, res, next) {
 	var data = {};
-	Faq.findById(req.params.id).then(function (model) {
+	Designation.findById(req.params.id).then(function (model) {
 		model.update(req.body, {where: {id: req.params.id}}).then(function (cb) {
 			data.status = 1; data.data = cb
 			res.json(data);
@@ -83,25 +83,14 @@ router.post('/update/:id', function (req, res, next) {
 router.get('/excel', function (req, res, next) {
 
 	var workbook = new Excel.Workbook();
-	var worksheet = workbook.addWorksheet('Faq', {pageSetup: {paperSize: 9, orientation: 'landscape',fitToHeight: 5, fitToWidth: 7}});
+	var worksheet = workbook.addWorksheet('Designation', {pageSetup: {paperSize: 9, orientation: 'landscape'}});
 	var sequence = Util.excelSequence();
-	var fields = Faq.keys;
+	var fields = Designation.keys;
 	var start = 3, num = 1;
 
 	worksheet.getCell('A1').value = '#';
-	worksheet.getRow(1).fill = {
-		type: 'pattern',
-		pattern:'solid',
-		fgColor:{argb:'07C'}
-	};
-	worksheet.getRow(1).font = {
-		name: 'Calibri',
-		color: { argb: 'FFFFFF' },
-		family: 2,
-		size: 13
-	};
 
-	Faq.findAll().then(function (models) {
+	Designation.findAll().then(function (models) {
 
 		for (var i = 0; i < fields.length; i++) {
 			var j = i + 1;
@@ -119,7 +108,7 @@ router.get('/excel', function (req, res, next) {
 		});
 
 		var filePath = appRoot + '/temp/';
-		var fileName = 'faq.xlsx';
+		var fileName = 'designation.xlsx';
 		workbook.xlsx.writeFile(filePath + fileName).then(function () {res.download(filePath + fileName);});
 	}).catch(function (err) {res.json(err);});
 });

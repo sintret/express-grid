@@ -1,85 +1,45 @@
 <nav class="breadcrumb pull-right">
 	<a class="breadcrumb-item" href="/">Home</a> /
-	<a class="breadcrumb-item" href="/bank">Index</a> /
+	<a class="breadcrumb-item" href="/designation">Index</a> /
 	<span class="breadcrumb-item active">View</span>
 </nav>
 
 <div class="page-header">
-	<h1>Bank <%= data.model.id %> </h1>
+	<h1>Designation <%= data.model.id %> </h1>
 </div>
 
 <table class="table table-striped table-responsive">
 	<tbody>
 		<tr>
 			<th>
-			<%= data.attributeData.swiftCode %>
+			<%= data.attributeData.companyId %>
 			</th>
 			<td>
-			<%- data.model.swiftCode %>
+			<%- data.model.companyId %>
 			</td>
 		</tr>
 		<tr>
 			<th>
-			<%= data.attributeData.bankCode %>
+			<%= data.attributeData.departmentId %>
 			</th>
 			<td>
-			<%- data.model.bankCode %>
+			<%- data.model.departmentId %>
 			</td>
 		</tr>
 		<tr>
 			<th>
-			<%= data.attributeData.bankName %>
+			<%= data.attributeData.code %>
 			</th>
 			<td>
-			<%- data.model.bankName %>
+			<%- data.model.code %>
 			</td>
 		</tr>
 		<tr>
 			<th>
-			<%= data.attributeData.branchCode %>
+			<%= data.attributeData.name %>
 			</th>
 			<td>
-			<%- data.model.branchCode %>
-			</td>
-		</tr>
-		<tr>
-			<th>
-			<%= data.attributeData.branchName %>
-			</th>
-			<td>
-			<%- data.model.branchName %>
-			</td>
-		</tr>
-		<tr>
-			<th>
-			<%= data.attributeData.city %>
-			</th>
-			<td>
-			<%- data.model.city %>
-			</td>
-		</tr>
-		<tr>
-			<th>
-			<%= data.attributeData.subBranchCode %>
-			</th>
-			<td>
-			<%- data.model.subBranchCode %>
-			</td>
-		</tr>
-		<tr>
-			<th>
-			<%= data.attributeData.subBranchName %>
-			</th>
-			<td>
-			<%- data.model.subBranchName %>
-			</td>
-		</tr>
-		<tr>
-			<th>
-			<%= data.attributeData.remark %>
-			</th>
-			<td>
-			<%- data.model.remark %>
+			<%- data.model.name %>
 			</td>
 		</tr>
 		<tr>

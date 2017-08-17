@@ -1,0 +1,670 @@
+<nav class="breadcrumb pull-right">
+	<a class="breadcrumb-item" href="/">Home</a> /
+	<a class="breadcrumb-item" href="/employee">Index</a> /
+	<span class="breadcrumb-item active">View</span>
+</nav>
+
+<div class="page-header">
+	<h1>Employee <%= data.model.id %> </h1>
+</div>
+
+<table class="table table-striped table-responsive">
+	<tbody>
+		<tr>
+			<th>
+			<%= data.attributeData.companyId %>
+			</th>
+			<td>
+			<%- data.model.companyId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.payrollId %>
+			</th>
+			<td>
+			<%- data.model.payrollId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.clientId %>
+			</th>
+			<td>
+			<%- data.model.clientId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.groupId %>
+			</th>
+			<td>
+			<%- data.model.groupId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.salaryLabelId %>
+			</th>
+			<td>
+			<%- data.model.salaryLabelId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.setupBuktiPotongId %>
+			</th>
+			<td>
+			<%- data.model.setupBuktiPotongId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.nik %>
+			</th>
+			<td>
+			<%- data.model.nik %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.fullname %>
+			</th>
+			<td>
+			<%- data.model.fullname %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.preferName %>
+			</th>
+			<td>
+			<%- data.model.preferName %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.status %>
+			</th>
+			<td>
+			<%- data.model.status %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.religion %>
+			</th>
+			<td>
+			<%- data.model.religion %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.nationality %>
+			</th>
+			<td>
+			<%- data.model.nationality %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.startDate %>
+			</th>
+			<td>
+			<%- data.model.startDate %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.endDate %>
+			</th>
+			<td>
+			<%- data.model.endDate %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.resign %>
+			</th>
+			<td>
+			<%- data.model.resign %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.masterJointDate %>
+			</th>
+			<td>
+			<%- data.model.masterJointDate %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.gender %>
+			</th>
+			<td>
+			<%- data.model.gender %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.birthDate %>
+			</th>
+			<td>
+			<%- data.model.birthDate %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.maritalStatus %>
+			</th>
+			<td>
+			<%- data.model.maritalStatus %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.dependentNo %>
+			</th>
+			<td>
+			<%- data.model.dependentNo %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.address1 %>
+			</th>
+			<td>
+			<%- data.model.address1 %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.address2 %>
+			</th>
+			<td>
+			<%- data.model.address2 %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.phoneHome %>
+			</th>
+			<td>
+			<%- data.model.phoneHome %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.phoneMobile %>
+			</th>
+			<td>
+			<%- data.model.phoneMobile %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.email %>
+			</th>
+			<td>
+			<%- data.model.email %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.mothersName %>
+			</th>
+			<td>
+			<%- data.model.mothersName %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.birthPlace %>
+			</th>
+			<td>
+			<%- data.model.birthPlace %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.cardId %>
+			</th>
+			<td>
+			<%- data.model.cardId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.passportNo %>
+			</th>
+			<td>
+			<%- data.model.passportNo %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.contractNo %>
+			</th>
+			<td>
+			<%- data.model.contractNo %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.startContract %>
+			</th>
+			<td>
+			<%- data.model.startContract %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.endContract %>
+			</th>
+			<td>
+			<%- data.model.endContract %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.taxId %>
+			</th>
+			<td>
+			<%- data.model.taxId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.taxIdDate %>
+			</th>
+			<td>
+			<%- data.model.taxIdDate %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.taxIdAddress %>
+			</th>
+			<td>
+			<%- data.model.taxIdAddress %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.taxOfficeId %>
+			</th>
+			<td>
+			<%- data.model.taxOfficeId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.picture %>
+			</th>
+			<td>
+			<%- data.model.picture %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.jamsostekNo %>
+			</th>
+			<td>
+			<%- data.model.jamsostekNo %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.jamsostekOfficeId %>
+			</th>
+			<td>
+			<%- data.model.jamsostekOfficeId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.currencyId %>
+			</th>
+			<td>
+			<%- data.model.currencyId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.regularIncomeCompanyTaxId %>
+			</th>
+			<td>
+			<%- data.model.regularIncomeCompanyTaxId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.irregularIncomeCompanyTaxId %>
+			</th>
+			<td>
+			<%- data.model.irregularIncomeCompanyTaxId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.paymentCurrency %>
+			</th>
+			<td>
+			<%- data.model.paymentCurrency %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.paymentMethodId %>
+			</th>
+			<td>
+			<%- data.model.paymentMethodId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.costCenter %>
+			</th>
+			<td>
+			<%- data.model.costCenter %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.bankAccNo %>
+			</th>
+			<td>
+			<%- data.model.bankAccNo %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.beneficiaryName %>
+			</th>
+			<td>
+			<%- data.model.beneficiaryName %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.bankSwiftCode %>
+			</th>
+			<td>
+			<%- data.model.bankSwiftCode %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.bankCode %>
+			</th>
+			<td>
+			<%- data.model.bankCode %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.bankBranchCode %>
+			</th>
+			<td>
+			<%- data.model.bankBranchCode %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.bankSubBranchCode %>
+			</th>
+			<td>
+			<%- data.model.bankSubBranchCode %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.taxCategoryId %>
+			</th>
+			<td>
+			<%- data.model.taxCategoryId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.overtimeOrNo %>
+			</th>
+			<td>
+			<%- data.model.overtimeOrNo %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.workingDay %>
+			</th>
+			<td>
+			<%- data.model.workingDay %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.branchOfficeId %>
+			</th>
+			<td>
+			<%- data.model.branchOfficeId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.designationId %>
+			</th>
+			<td>
+			<%- data.model.designationId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.departmentId %>
+			</th>
+			<td>
+			<%- data.model.departmentId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.divisionId %>
+			</th>
+			<td>
+			<%- data.model.divisionId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.positionId %>
+			</th>
+			<td>
+			<%- data.model.positionId %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.loanBalance %>
+			</th>
+			<td>
+			<%- data.model.loanBalance %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.jkkCode %>
+			</th>
+			<td>
+			<%- data.model.jkkCode %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.jkmCode %>
+			</th>
+			<td>
+			<%- data.model.jkmCode %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.jpkCode %>
+			</th>
+			<td>
+			<%- data.model.jpkCode %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.jhtCode %>
+			</th>
+			<td>
+			<%- data.model.jhtCode %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.pensiunCode %>
+			</th>
+			<td>
+			<%- data.model.pensiunCode %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.bpjs %>
+			</th>
+			<td>
+			<%- data.model.bpjs %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.bpjsNo %>
+			</th>
+			<td>
+			<%- data.model.bpjsNo %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.bpjsCurrent %>
+			</th>
+			<td>
+			<%- data.model.bpjsCurrent %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.dplkEECode %>
+			</th>
+			<td>
+			<%- data.model.dplkEECode %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.dplkERCode %>
+			</th>
+			<td>
+			<%- data.model.dplkERCode %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.workingPeriodeMutasi %>
+			</th>
+			<td>
+			<%- data.model.workingPeriodeMutasi %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.workingPeriodeMutasiInt %>
+			</th>
+			<td>
+			<%- data.model.workingPeriodeMutasiInt %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.formula %>
+			</th>
+			<td>
+			<%- data.model.formula %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.formulaGross %>
+			</th>
+			<td>
+			<%- data.model.formulaGross %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.params %>
+			</th>
+			<td>
+			<%- data.model.params %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.password %>
+			</th>
+			<td>
+			<%- data.model.password %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.online %>
+			</th>
+			<td>
+			<%- data.model.online %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.createDate %>
+			</th>
+			<td>
+			<%- data.model.createDate %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.createBy %>
+			</th>
+			<td>
+			<%- data.model.createBy %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.updateDate %>
+			</th>
+			<td>
+			<%- data.model.updateDate %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.updateBy %>
+			</th>
+			<td>
+			<%- data.model.updateBy %>
+			</td>
+		</tr>
+		<tr>
+			<th>
+			<%= data.attributeData.id %>
+			</th>
+			<td>
+			<%- data.model.id %>
+			</td>
+		</tr>
+	</tbody>
+</table>

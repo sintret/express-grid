@@ -1,4 +1,11 @@
 <script>
+	var attributeData = <%- JSON.stringify(data.attributeData) %>;
+	var jsFilter = "";
+	var MyCustomDirectLoadStrategy = function(grid) {
+		$("#pageSize").on("change", function () {
+			grid.refresh();
+		});
+	};
 	$("#jsGrid").jsGrid({
 		width: "100%",
 		filtering: true,
@@ -9,7 +16,7 @@
 		paging: true,
 		pageLoading: true,
 		css: "kv-grid-table table table-bordered table-striped kv-table-wrap",
-		pageSize: 20,
+		pageSize: $("#pageSize").val(),
 		pageButtonCount: 10,
 		deleteConfirm: "Do you really want to delete client?",
 			controller: {
@@ -20,7 +27,7 @@
 						url: "/bank/list",
 						data: filter,
 						success: function (html) {
-							var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = "Showing <b>"; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");
+							var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = "Showing <b>"; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");jsFilter = filter;
 						}
 					});
 				},
@@ -28,19 +35,19 @@
 				deleteItem: function (item) {return $.ajax({type: "DELETE",url: "/bank",data: item});}
 			},
 			fields: [
-				{name:"swiftCode", title:"SwiftCode", type: "text", width: 90},
-				{name:"bankCode", title:"BankCode", type: "text", width: 90},
-				{name:"bankName", title:"BankName", type: "text", width: 90},
-				{name:"branchCode", title:"BranchCode", type: "text", width: 90},
-				{name:"branchName", title:"BranchName", type: "text", width: 90},
-				{name:"city", title:"City", type: "text", width: 90},
-				{name:"subBranchCode", title:"SubBranchCode", type: "text", width: 90},
-				{name:"subBranchName", title:"SubBranchName", type: "text", width: 90},
-				{name:"remark", title:"Remark", type: "text", width: 90},
-				{name:"createDate", title:"CreateDate", type: "text", width: 90},
-				{name:"createBy", title:"CreateBy", type: "text", width: 90},
-				{name:"updateDate", title:"UpdateDate", type: "text", width: 90},
-				{name:"updateBy", title:"UpdateBy", type: "text", width: 90},
+				{name : "swiftCode", title : attributeData.swiftCode, type: "text", width: 90},
+				{name : "bankCode", title : attributeData.bankCode, type: "text", width: 90},
+				{name : "bankName", title : attributeData.bankName, type: "text", width: 90},
+				{name : "branchCode", title : attributeData.branchCode, type: "text", width: 90},
+				{name : "branchName", title : attributeData.branchName, type: "text", width: 90},
+				{name : "city", title : attributeData.city, type: "text", width: 90},
+				{name : "subBranchCode", title : attributeData.subBranchCode, type: "text", width: 90},
+				{name : "subBranchName", title : attributeData.subBranchName, type: "text", width: 90},
+				{name : "remark", title : attributeData.remark, type: "text", width: 90},
+				{name : "createDate", title : attributeData.createDate, type: "text", width: 90},
+				{name : "createBy", title : attributeData.createBy, type: "text", width: 90},
+				{name : "updateDate", title : attributeData.updateDate, type: "text", width: 90},
+				{name : "updateBy", title : attributeData.updateBy, type: "text", width: 90},
 				{type: "control", width: 100, editButton: false,
 				itemTemplate: function (value, item) {
 					var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
@@ -52,4 +59,7 @@
 				}
 			]
 		});
+
+	$(".export-xls").on("click", function () {location.href="/bank/excel?"+jQuery.param(jsFilter);});
+	$("#pageSize").on("change", function () {$("#jsGrid").jsGrid("option", "pageSize", $(this).val());});
 </script>

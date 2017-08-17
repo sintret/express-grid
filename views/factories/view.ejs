@@ -1,6 +1,6 @@
 <nav class="breadcrumb pull-right">
 	<a class="breadcrumb-item" href="/">Home</a> /
-	<a class="breadcrumb-item" href="/factories">Factories</a> /
+	<a class="breadcrumb-item" href="/factories">Index</a> /
 	<span class="breadcrumb-item active">View</span>
 </nav>
 
@@ -12,58 +12,58 @@
 	<tbody>
 		<tr>
 			<th>
-			Name
+			<%= data.attributeData.name %>
 			</th>
 			<td>
-			<%= data.model.name %>
+			<%- data.model.name %>
 			</td>
 		</tr>
 		<tr>
 			<th>
-			Address
+			<%= data.attributeData.address %>
 			</th>
 			<td>
-			<%= data.model.address %>
+			<%- data.model.address %>
 			</td>
 		</tr>
 		<tr>
 			<th>
-			City
+			<%= data.attributeData.city %>
 			</th>
 			<td>
-			<%= data.model.city %>
+			<%- data.model.city %>
 			</td>
 		</tr>
 		<tr>
 			<th>
-			Province
+			<%= data.attributeData.province %>
 			</th>
 			<td>
-			<%= data.model.province %>
+			<%- data.model.province %>
 			</td>
 		</tr>
 		<tr>
 			<th>
-			Code
+			<%= data.attributeData.code %>
 			</th>
 			<td>
-			<%= data.model.code %>
+			<%- data.model.code %>
 			</td>
 		</tr>
 		<tr>
 			<th>
-			Status
+			<%= data.attributeData.status %>
 			</th>
 			<td>
-			<%= data.model.status %>
+			<%- data.model.status %>
 			</td>
 		</tr>
 		<tr>
 			<th>
-			Id
+			<%= data.attributeData.id %>
 			</th>
 			<td>
-			<%= data.model.id %>
+			<%- data.model.id %>
 			</td>
 		</tr>
 	</tbody>

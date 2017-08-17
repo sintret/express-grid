@@ -1,5 +1,5 @@
 <script>
-	var form = document.getElementById("bank-form");
+	var form = document.getElementById("department-form");
 	form.onsubmit = function (ev) {
 		ev.preventDefault();
 		var url = window.location.pathname;
@@ -9,7 +9,7 @@
 			data: $(this).serialize(),
 			success: function (data) {
 				if (data.status == 1) {
-					location.href = "/bank/view/" + data.data.id;
+					location.href = "/department/view/" + data.data.id;
 				} else {
 			var errors = data.data.errors;
 			for (i = 0; i < errors.length; i++) {

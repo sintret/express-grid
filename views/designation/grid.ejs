@@ -18,19 +18,19 @@
 					return $.ajax({
 						datatype: "json",
 						type: "GET",
-						url: "/department/list",
+						url: "/designation/list",
 						data: filter,
 						success: function (html) {
 							var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = "Showing <b>"; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");
 						}
 					});
 				},
-				updateItem: function (item) {return $.ajax({type: "PUT",url: "/department",data: item});},
-				deleteItem: function (item) {return $.ajax({type: "DELETE",url: "/department",data: item});}
+				updateItem: function (item) {return $.ajax({type: "PUT",url: "/designation",data: item});},
+				deleteItem: function (item) {return $.ajax({type: "DELETE",url: "/designation",data: item});}
 			},
 			fields: [
 				{name : "companyId", title : attributeData.companyId, type: "text", width: 90},
-				{name : "divisionId", title : attributeData.divisionId, type: "text", width: 90},
+				{name : "departmentId", title : attributeData.departmentId, type: "text", width: 90},
 				{name : "code", title : attributeData.code, type: "text", width: 90},
 				{name : "name", title : attributeData.name, type: "text", width: 90},
 				{name : "createDate", title : attributeData.createDate, type: "text", width: 90},
@@ -40,9 +40,9 @@
 				{type: "control", width: 100, editButton: false,
 				itemTemplate: function (value, item) {
 					var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
-					var $customViewButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class='glyphicon glyphicon-eye-open'></span>").click(function (e) {location.href = "/department/view/" + item.id; e.stopPropagation();});
-					var $customEditButton = $("<button>").attr({class: "btn btn-success btn-xs"}).html("<span class='glyphicon glyphicon-pencil'></span>").click(function (e) {location.href = "/department/update/" + item.id; e.stopPropagation();});
-					var $customDeleteButton = $("<button>").attr({class: "btn btn-danger btn-xs"}).html("<span class='glyphicon glyphicon-trash'></span>").click(function (e) { if(window.confirm("delete selected data ?")){$.ajax({url:"/department/"+item.id,type:"DELETE",data:{id:item.id},success:function(data){location.href="";}});};e.stopPropagation();});
+					var $customViewButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class='glyphicon glyphicon-eye-open'></span>").click(function (e) {location.href = "/designation/view/" + item.id; e.stopPropagation();});
+					var $customEditButton = $("<button>").attr({class: "btn btn-success btn-xs"}).html("<span class='glyphicon glyphicon-pencil'></span>").click(function (e) {location.href = "/designation/update/" + item.id; e.stopPropagation();});
+					var $customDeleteButton = $("<button>").attr({class: "btn btn-danger btn-xs"}).html("<span class='glyphicon glyphicon-trash'></span>").click(function (e) { if(window.confirm("delete selected data ?")){$.ajax({url:"/designation/"+item.id,type:"DELETE",data:{id:item.id},success:function(data){location.href="";}});};e.stopPropagation();});
 					return $("<div>").append($customViewButton).append("   ").append($customEditButton).append("    ").append($customDeleteButton);
 					}
 				}

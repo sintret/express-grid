@@ -12,10 +12,10 @@ var attributeData = {
 		allowNull: false,
 		validate: {isAlphanumeric: true}
 	},
-	divisionId: {
+	departmentId: {
 		type: Sequelize.INTEGER(11),
-		allowNull: true,
-		validate: {notEmpty: true,isAlphanumeric: true}
+		allowNull: false,
+		validate: {isAlphanumeric: true}
 	},
 	code: {
 		type: Sequelize.STRING(255),
@@ -48,12 +48,12 @@ var attributeData = {
 	}
 }
 
-var model = sequelize.define("department", attributeData, {
+var model = sequelize.define("designation", attributeData, {
 	timestamps: false
 });
-model.attributeData = {companyId:'CompanyId',divisionId:'DivisionId',code:'Code',name:'Name',createDate:'CreateDate',createBy:'CreateBy',updateDate:'UpdateDate',updateBy:'UpdateBy',id:'Id'};
-model.keys = ["companyId","divisionId","code","name","createDate","createBy","updateDate","updateBy","id"];
-model.newEmpty = {companyId:null,divisionId:null,code:null,name:null,createDate:null,createBy:null,updateDate:null,updateBy:null,id:null};
+model.attributeData = {companyId:'CompanyId',departmentId:'DepartmentId',code:'Code',name:'Name',createDate:'CreateDate',createBy:'CreateBy',updateDate:'UpdateDate',updateBy:'UpdateBy',id:'Id'};
+model.keys = ["companyId","departmentId","code","name","createDate","createBy","updateDate","updateBy","id"];
+model.newEmpty = {companyId:null,departmentId:null,code:null,name:null,createDate:null,createBy:null,updateDate:null,updateBy:null,id:null};
 
 
 model.getGridFilter = function (query, callback) {

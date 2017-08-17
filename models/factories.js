@@ -5,51 +5,56 @@ var attributeData = {
 		type: Sequelize.INTEGER(10),
 		allowNull: false,
 		primaryKey: true,
-		autoIncrement: true
+		autoIncrement: true,
 	},
 	name: {
 		type: Sequelize.STRING(255),
 		allowNull: false,
-		validate : {
-			notEmpty :{
-				msg : 'Name can not empty'
-			}
-		}
+		validate: {max: 255}
 	},
 	address: {
 		type: Sequelize.STRING(255),
-		allowNull: true
+		allowNull: true,
+		validate: {notEmpty: true,max: 255}
 	},
 	city: {
 		type: Sequelize.STRING(255),
-		allowNull: true
+		allowNull: true,
+		validate: {notEmpty: true,max: 255}
 	},
 	province: {
 		type: Sequelize.STRING(255),
-		allowNull: true
+		allowNull: true,
+		validate: {notEmpty: true,max: 255}
 	},
 	code: {
 		type: Sequelize.STRING(20),
-		allowNull: true
+		allowNull: true,
+		validate: {notEmpty: true,max: 20}
 	},
 	status: {
 		type: Sequelize.ENUM('1','0'),
-		allowNull: false
+		allowNull: false,
 	}
 }
 
 var model = sequelize.define("factories", attributeData, {
 	timestamps: false
 });
-model.attributeData = {name:null,address:null,city:null,province:null,code:null,status:null,id:null};
+model.attributeData = {name:'Name',address:'Address',city:'City',province:'Province',code:'Code',status:'Status',id:'Id'};
 model.keys = ["name","address","city","province","code","status","id"];
+model.newEmpty = {name:null,address:null,city:null,province:null,code:null,status:null,id:null};
+
 
 model.getGridFilter = function (query, callback) {
 	callback = callback || function () {}
 	var s = {};
-	var limit = parseInt(query.pageSize || 20);
+	var limit = parseInt(query.pageSize || 50);
 	var pageIndex = parseInt(query.pageIndex) || 1;
 	var offset = limit * (pageIndex - 1);
+	var sortField = query.sortField || "id";
+	var sortOrder = query.sortOrder || "DESC";
+	sortOrder = sortOrder.toUpperCase();
 
 	var keys = model.keys;
 	var o = {};
@@ -57,6 +62,8 @@ model.getGridFilter = function (query, callback) {
 	o.attributes = keys ;
 	o.limit = limit;
 	o.offset =offset;
+
+	o.order = [[sortField,sortOrder]];
 
 	if (query) {
 		for (var q in query) {
@@ -77,8 +84,6 @@ model.getGridFilter = function (query, callback) {
 			x.itemsCount = results.count;
 			resolve(x);
 			return callback(null, x);
-		}).catch(function (err) {
-			reject(err);
 		});
 	});
 }
@@ -88,15 +93,9 @@ model.insertData = function (data,callback) {
 
 	return new Promise(function (resolve, reject) {
 		model.create(data).then(function (x) {
-			var json = {};
-			json.status=1;
-			json.data=x;
-			resolve(json);
+			var json = {};json.status=1;json.data=x;resolve(json);
 		}).catch(Sequelize.ValidationError, function (err) {
-			var json = {};
-			json.status=0;
-			json.data=err;
-			reject(json);
+			var json = {};json.status=0;json.data=err;reject(json);
 		});
 	});
 }

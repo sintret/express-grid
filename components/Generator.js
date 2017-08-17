@@ -175,7 +175,8 @@ var Generator = function (arr, table, dirRoot) {
         out +=  this.tab + "var fields = "+this.capitalizeFirstLetter(table)+".keys;" +this.newLine;
         out +=  this.tab + "var start = 3, num = 1;" + this.newLine + this.newLine;
         out +=  this.tab + "worksheet.getCell('A1').value = '#';" + this.newLine + this.newLine;
-        out +=  this.tab + this.capitalizeFirstLetter(table)+".findAll().then(function (models) {" + this.newLine + this.newLine;
+        out +=  this.tab + this.capitalizeFirstLetter(table)+".getGridFilter(req.query).then(function (items) {" + this.newLine + this.newLine;
+        out +=  this.tab + this.tab + "var models = items.data;" +this.newLine;
         out +=  this.tab + this.tab + "for (var i = 0; i < fields.length; i++) {" +this.newLine;
         out +=  this.tab + this.tab + this.tab + "var j = i + 1;" +this.newLine;
         out +=  this.tab + this.tab + this.tab + "worksheet.getCell(sequence[j] + '1').value = Util.capitalizeFirstLetter(fields[i]);" +this.newLine;
@@ -226,6 +227,12 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + this.tab + this.tab + this.tab + '<a type="button" class="btn btn-warning" href="/' + table + '/parsing" title="Import Excel"><i class="fa fa-file-excel-o"></i></a>' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + '<a type="button" id="backupExcel" href="/'+table+'/excel" class="btn btn-default" title="Excel Backup"><i class="fa fa-download"></i></a>' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + '<a class="btn btn-default" href="/' + table + '" title="Refresh Grid" ><i class="glyphicon glyphicon-repeat"></i></a></div>' + this.newLine;
+
+        out += this.tab + this.tab + this.tab + '<div class="btn-group"><select id="pageSize" class="form-control"><option selected value="50">50</option><option value="100">100</option><option value="300">300</option> </select> </div>' + this.newLine;
+        out += this.tab + this.tab + this.tab + '<div class="btn-group">' + this.newLine;
+        out += this.tab + this.tab + this.tab + '<button id="w9" class="btn btn-default dropdown-toggle" title="Export" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-share-square-o"></i>  <span class="caret"></span></button>' + this.newLine;
+        out += this.tab + this.tab + this.tab + '<ul id="w10" class="dropdown-menu dropdown-menu-right"><li role="presentation" class="dropdown-header">Export Page Data</li><li title="Microsoft Excel 95+"><a class="export-xls" href="#" ><i class="text-success fa fa-file-excel-o"></i> Excel</a></li><li title="Portable Document Format"><a class="export-pdf" href="#"><i class="text-danger fa fa-file-pdf-o"></i> PDF</a></li></ul>' + this.newLine;
+        out += this.tab + this.tab + this.tab + '</div>' + this.newLine;
         out += this.tab + this.tab + this.tab + '</div>' + this.newLine;
         out += this.tab + this.tab + '</div>' + this.newLine;
         out += this.tab + this.tab + '<div style="padding-top: 7px;"><em>* Exports &amp; Imports Excel Format</em></div>' + this.newLine;
@@ -241,6 +248,7 @@ var Generator = function (arr, table, dirRoot) {
 
         var out = '<script>' + this.newLine;
         out += this.tab + 'var attributeData = <%- JSON.stringify(data.attributeData) %>;' + this.newLine;
+        out += this.tab + 'var jsFilter = "";' + this.newLine;
         out += this.tab + '$("#jsGrid").jsGrid({' + this.newLine;
         out += this.tab + this.tab + 'width: "100%",' + this.newLine;
         out += this.tab + this.tab + 'filtering: true,' + this.newLine;
@@ -251,7 +259,7 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + this.tab + 'paging: true,' + this.newLine;
         out += this.tab + this.tab + 'pageLoading: true,' + this.newLine;
         out += this.tab + this.tab + 'css: "kv-grid-table table table-bordered table-striped kv-table-wrap",' + this.newLine;
-        out += this.tab + this.tab + 'pageSize: 20,' + this.newLine;
+        out += this.tab + this.tab + 'pageSize: $("#pageSize").val(),' + this.newLine;
         out += this.tab + this.tab + 'pageButtonCount: 10,' + this.newLine;
         out += this.tab + this.tab + 'deleteConfirm: "Do you really want to delete client?",' + this.newLine;
         out += this.tab + this.tab + this.tab + 'controller: {' + this.newLine;
@@ -262,7 +270,7 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + 'url: "/' + table + '/list",' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + 'data: filter,' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + 'success: function (html) {' + this.newLine;
-        out += this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + 'var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = "Showing <b>"; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");' + this.newLine;
+        out += this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + 'var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = "Showing <b>"; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");jsFilter = filter;' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + this.tab + this.tab + '}' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + this.tab + '});' + this.newLine;
         out += this.tab + this.tab + this.tab + this.tab + '},' + this.newLine;
@@ -287,7 +295,10 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + this.tab + this.tab + this.tab + '}' + this.newLine;
 
         out += this.tab + this.tab + this.tab + ']' + this.newLine;
-        out += this.tab + this.tab + '});' + this.newLine;
+        out += this.tab + this.tab + '});' + this.newLine+ this.newLine;
+
+        out += this.tab + '$(".export-xls").on("click", function () {location.href="/'+table+'/excel?"+jQuery.param(jsFilter);});' + this.newLine;
+        out += this.tab + '$("#pageSize").on("change", function () {$("#jsGrid").jsGrid("option", "pageSize", $(this).val());});' + this.newLine;
 
 
         out += '</script>';
@@ -466,7 +477,7 @@ var Generator = function (arr, table, dirRoot) {
     this.dataFields = function () {
         var obj = [];
         for (var i = 0; i < this.fields.length; i++) {
-            //  out += this.structure(this.fields[i]);
+
             var o = this.fields[i];
             var t = [];
             t.name = o['Field'];
@@ -491,7 +502,7 @@ var Generator = function (arr, table, dirRoot) {
         out += this.newLine;
         out += this.tab + 'callback = callback || function () {}' + this.newLine;
         out += this.tab + 'var s = {};' + this.newLine;
-        out += this.tab + 'var limit = parseInt(query.pageSize || 20);' + this.newLine;
+        out += this.tab + 'var limit = parseInt(query.pageSize || 50);' + this.newLine;
         out += this.tab + 'var pageIndex = parseInt(query.pageIndex) || 1;' + this.newLine;
         out += this.tab + 'var offset = limit * (pageIndex - 1);' + this.newLine;
         out += this.tab + 'var sortField = query.sortField || "id";' + this.newLine;
@@ -538,8 +549,6 @@ var Generator = function (arr, table, dirRoot) {
         s += this.newLine;
 
         var sType = this.setType(obj['Type']);
-
-        //s += this.getType(obj['Type']) + ',';
 
         s += this.tab + this.tab + "type: Sequelize." + sType.toUpperCase() + ',';
         if (obj.Null == "NO") {

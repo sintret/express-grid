@@ -1,3 +1,8 @@
+<nav class="breadcrumb pull-right">
+	<a class="breadcrumb-item" href="/">Home</a> /
+	<span class="breadcrumb-item active">Index</span>
+</nav>
+
 <div class="page-header">
 	<h1><%= title %></h1>
 </div>
@@ -16,7 +21,7 @@
 				<div class="btn-group">
 				<a type="button" id="create_btn" class="btn btn-success"href="/company/create" title="Add Data"><i class="glyphicon glyphicon-plus"></i></a>
 				<a type="button" class="btn btn-warning" href="/company/parsing" title="Import Excel"><i class="fa fa-file-excel-o"></i></a>
-				<button type="button" id="backupExcel" class="btn btn-default" title="Excel Backup"><i class="fa fa-download"></i></button>
+				<a type="button" id="backupExcel" href="/company/excel" class="btn btn-default" title="Excel Backup"><i class="fa fa-download"></i></a>
 				<a class="btn btn-default" href="/company" title="Refresh Grid" ><i class="glyphicon glyphicon-repeat"></i></a></div>
 			</div>
 		</div>

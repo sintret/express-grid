@@ -1,0 +1,179 @@
+<form id="company-form" method="post" action="/company/create" >
+	<div class="form-group divcode">
+		<label for="code"><%= data.attributeData.code %></label>
+		<input type="text" class="form-control" id="code" name="code" placeholder="Code" value="<%= data.model.code%>">
+	</div>
+	<div class="form-group divcodes">
+		<label for="codes"><%= data.attributeData.codes %></label>
+		<input type="text" class="form-control" id="codes" name="codes" placeholder="Codes" value="<%= data.model.codes%>">
+	</div>
+	<div class="form-group divalias">
+		<label for="alias"><%= data.attributeData.alias %></label>
+		<input type="text" class="form-control" id="alias" name="alias" placeholder="Alias" value="<%= data.model.alias%>">
+	</div>
+	<div class="form-group divemployeeCategoryId">
+		<label for="employeeCategoryId"><%= data.attributeData.employeeCategoryId %></label>
+		<select class="form-control" name="employeeCategoryId" id="employeeCategoryId">
+			<option value=""> -- </option>
+		</select>
+	</div>
+	<div class="form-group divtypeTaxId">
+		<label for="typeTaxId"><%= data.attributeData.typeTaxId %></label>
+		<select class="form-control" name="typeTaxId" id="typeTaxId">
+			<option value=""> -- </option>
+		</select>
+	</div>
+	<div class="form-group divworkDays">
+		<label for="workDays"><%= data.attributeData.workDays %></label>
+		<select class="form-control" name="workDays" id="workDays">
+			<option value=""> -- </option>
+		</select>
+	</div>
+	<div class="form-group divname">
+		<label for="name"><%= data.attributeData.name %></label>
+		<input type="text" class="form-control" id="name" name="name" placeholder="Name" value="<%= data.model.name%>">
+	</div>
+	<div class="form-group divnpwp">
+		<label for="npwp"><%= data.attributeData.npwp %></label>
+		<input type="text" class="form-control" id="npwp" name="npwp" placeholder="Npwp" value="<%= data.model.npwp%>">
+	</div>
+	<div class="form-group divaddress">
+		<label for="address"><%= data.attributeData.address %></label>
+		<input type="text" class="form-control" id="address" name="address" placeholder="Address" value="<%= data.model.address%>">
+	</div>
+	<div class="form-group divkota">
+		<label for="kota"><%= data.attributeData.kota %></label>
+		<input type="text" class="form-control" id="kota" name="kota" placeholder="Kota" value="<%= data.model.kota%>">
+	</div>
+	<div class="form-group divdescription">
+		<label for="description"><%= data.attributeData.description %></label>
+		<input type="text" class="form-control" id="description" name="description" placeholder="Description" value="<%= data.model.description%>">
+	</div>
+	<div class="form-group divjamsostekNo">
+		<label for="jamsostekNo"><%= data.attributeData.jamsostekNo %></label>
+		<input type="text" class="form-control" id="jamsostekNo" name="jamsostekNo" placeholder="JamsostekNo" value="<%= data.model.jamsostekNo%>">
+	</div>
+	<div class="form-group divtelephone">
+		<label for="telephone"><%= data.attributeData.telephone %></label>
+		<input type="text" class="form-control" id="telephone" name="telephone" placeholder="Telephone" value="<%= data.model.telephone%>">
+	</div>
+	<div class="form-group divfax">
+		<label for="fax"><%= data.attributeData.fax %></label>
+		<input type="text" class="form-control" id="fax" name="fax" placeholder="Fax" value="<%= data.model.fax%>">
+	</div>
+	<div class="form-group divvirtual_account">
+		<label for="virtual_account"><%= data.attributeData.virtual_account %></label>
+		<input type="text" class="form-control" id="virtual_account" name="virtual_account" placeholder="Virtual_account" value="<%= data.model.virtual_account%>">
+	</div>
+	<div class="form-group divcontactPerson">
+		<label for="contactPerson"><%= data.attributeData.contactPerson %></label>
+		<input type="text" class="form-control" id="contactPerson" name="contactPerson" placeholder="ContactPerson" value="<%= data.model.contactPerson%>">
+	</div>
+	<div class="form-group divofficerName">
+		<label for="officerName"><%= data.attributeData.officerName %></label>
+		<input type="text" class="form-control" id="officerName" name="officerName" placeholder="OfficerName" value="<%= data.model.officerName%>">
+	</div>
+	<div class="form-group divofficerId">
+		<label for="officerId"><%= data.attributeData.officerId %></label>
+		<input type="text" class="form-control" id="officerId" name="officerId" placeholder="OfficerId" value="<%= data.model.officerId%>">
+	</div>
+	<div class="form-group divposition">
+		<label for="position"><%= data.attributeData.position %></label>
+		<input type="text" class="form-control" id="position" name="position" placeholder="Position" value="<%= data.model.position%>">
+	</div>
+	<div class="form-group divcreateDate">
+		<label for="createDate"><%= data.attributeData.createDate %></label>
+		<input type="date" class="form-control" id="createDate" name="createDate" placeholder="CreateDate" value="<%= data.model.createDate%>">
+	</div>
+	<div class="form-group divformulaId">
+		<label for="formulaId"><%= data.attributeData.formulaId %></label>
+		<select class="form-control" name="formulaId" id="formulaId">
+			<option value=""> -- </option>
+		</select>
+	</div>
+	<div class="form-group divgroup">
+		<label for="group"><%= data.attributeData.group %></label>
+		<input type="text" class="form-control" id="group" name="group" placeholder="Group" value="<%= data.model.group%>">
+	</div>
+	<div class="form-group divgroupId">
+		<label for="groupId"><%= data.attributeData.groupId %></label>
+		<select class="form-control" name="groupId" id="groupId">
+			<option value=""> -- </option>
+		</select>
+	</div>
+	<div class="form-group divcontractNo">
+		<label for="contractNo"><%= data.attributeData.contractNo %></label>
+		<input type="text" class="form-control" id="contractNo" name="contractNo" placeholder="ContractNo" value="<%= data.model.contractNo%>">
+	</div>
+	<div class="form-group divstartContract">
+		<label for="startContract"><%= data.attributeData.startContract %></label>
+		<input type="date" class="form-control" id="startContract" name="startContract" placeholder="StartContract" value="<%= data.model.startContract%>">
+	</div>
+	<div class="form-group divendContract">
+		<label for="endContract"><%= data.attributeData.endContract %></label>
+		<input type="date" class="form-control" id="endContract" name="endContract" placeholder="EndContract" value="<%= data.model.endContract%>">
+	</div>
+	<div class="form-group divkodeAkunPajak">
+		<label for="kodeAkunPajak"><%= data.attributeData.kodeAkunPajak %></label>
+		<input type="text" class="form-control" id="kodeAkunPajak" name="kodeAkunPajak" placeholder="KodeAkunPajak" value="<%= data.model.kodeAkunPajak%>">
+	</div>
+	<div class="form-group divkodeSetoran">
+		<label for="kodeSetoran"><%= data.attributeData.kodeSetoran %></label>
+		<input type="text" class="form-control" id="kodeSetoran" name="kodeSetoran" placeholder="KodeSetoran" value="<%= data.model.kodeSetoran%>">
+	</div>
+	<div class="form-group divuraianPembayaran">
+		<label for="uraianPembayaran"><%= data.attributeData.uraianPembayaran %></label>
+		<input type="text" class="form-control" id="uraianPembayaran" name="uraianPembayaran" placeholder="UraianPembayaran" value="<%= data.model.uraianPembayaran%>">
+	</div>
+	<div class="form-group divjointDate">
+		<label for="jointDate"><%= data.attributeData.jointDate %></label>
+		<input type="date" class="form-control" id="jointDate" name="jointDate" placeholder="JointDate" value="<%= data.model.jointDate%>">
+	</div>
+	<div class="form-group divtenagaKerja">
+		<label for="tenagaKerja"><%= data.attributeData.tenagaKerja %></label>
+		<select class="form-control" name="tenagaKerja" id="tenagaKerja">
+			<option value=""> -- </option>
+		</select>
+	</div>
+	<div class="form-group divupah">
+		<label for="upah"><%= data.attributeData.upah %></label>
+		<input type="text" class="form-control" id="upah" name="upah" placeholder="Upah" value="<%= data.model.upah%>">
+	</div>
+	<div class="form-group divbpjs">
+		<label for="bpjs"><%= data.attributeData.bpjs %></label>
+		<input type="text" class="form-control" id="bpjs" name="bpjs" placeholder="Bpjs" value="<%= data.model.bpjs%>">
+	</div>
+	<div class="form-group divonline">
+		<label for="online"><%= data.attributeData.online %></label>
+		<select class="form-control" name="online" id="online">
+			<option value=""> -- </option>
+		</select>
+	</div>
+	<div class="form-group divlogo">
+		<label for="logo"><%= data.attributeData.logo %></label>
+		<input type="text" class="form-control" id="logo" name="logo" placeholder="Logo" value="<%= data.model.logo%>">
+	</div>
+	<div class="form-group divonlineDate">
+		<label for="onlineDate"><%= data.attributeData.onlineDate %></label>
+		<input type="date" class="form-control" id="onlineDate" name="onlineDate" placeholder="OnlineDate" value="<%= data.model.onlineDate%>">
+	</div>
+	<div class="form-group divcreateBy">
+		<label for="createBy"><%= data.attributeData.createBy %></label>
+		<select class="form-control" name="createBy" id="createBy">
+			<option value=""> -- </option>
+		</select>
+	</div>
+	<div class="form-group divupdateDate">
+		<label for="updateDate"><%= data.attributeData.updateDate %></label>
+		<input type="date" class="form-control" id="updateDate" name="updateDate" placeholder="UpdateDate" value="<%= data.model.updateDate%>">
+	</div>
+	<div class="form-group divupdateBy">
+		<label for="updateBy"><%= data.attributeData.updateBy %></label>
+		<select class="form-control" name="updateBy" id="updateBy">
+			<option value=""> -- </option>
+		</select>
+	</div>
+ <div class="form-group"><button id="company-submit" type="submit" class="btn btn-success">Submit</button></div>
+</form>
+
+<% include formjs.ejs %>

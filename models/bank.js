@@ -76,8 +76,10 @@ var attributeData = {
 var model = sequelize.define("bank", attributeData, {
 	timestamps: false
 });
-model.attributeData = {swiftCode:null,bankCode:null,bankName:null,branchCode:null,branchName:null,city:null,subBranchCode:null,subBranchName:null,remark:null,createDate:null,createBy:null,updateDate:null,updateBy:null,id:null};
+model.attributeData = {swiftCode:'SwiftCode',bankCode:'BankCode',bankName:'BankName',branchCode:'BranchCode',branchName:'BranchName',city:'City',subBranchCode:'SubBranchCode',subBranchName:'SubBranchName',remark:'Remark',createDate:'CreateDate',createBy:'CreateBy',updateDate:'UpdateDate',updateBy:'UpdateBy',id:'Id'};
 model.keys = ["swiftCode","bankCode","bankName","branchCode","branchName","city","subBranchCode","subBranchName","remark","createDate","createBy","updateDate","updateBy","id"];
+model.newEmpty = {swiftCode:null,bankCode:null,bankName:null,branchCode:null,branchName:null,city:null,subBranchCode:null,subBranchName:null,remark:null,createDate:null,createBy:null,updateDate:null,updateBy:null,id:null};
+
 
 model.getGridFilter = function (query, callback) {
 	callback = callback || function () {}
@@ -88,13 +90,14 @@ model.getGridFilter = function (query, callback) {
 	var sortField = query.sortField || "id";
 	var sortOrder = query.sortOrder || "DESC";
 	sortOrder = sortOrder.toUpperCase();
-	
+
 	var keys = model.keys;
 	var o = {};
 	o.raw = true;
 	o.attributes = keys ;
 	o.limit = limit;
 	o.offset =offset;
+
 	o.order = [[sortField,sortOrder]];
 
 	if (query) {
