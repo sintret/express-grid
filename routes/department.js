@@ -90,8 +90,9 @@ router.get('/excel', function (req, res, next) {
 
 	worksheet.getCell('A1').value = '#';
 
-	Department.findAll().then(function (models) {
+	Department.getGridFilter(req.query).then(function (items) {
 
+		var models = items.data;
 		for (var i = 0; i < fields.length; i++) {
 			var j = i + 1;
 			worksheet.getCell(sequence[j] + '1').value = Util.capitalizeFirstLetter(fields[i]);
@@ -112,4 +113,12 @@ router.get('/excel', function (req, res, next) {
 		workbook.xlsx.writeFile(filePath + fileName).then(function () {res.download(filePath + fileName);});
 	}).catch(function (err) {res.json(err);});
 });
+router.get('/parsing', function (req, res, next) {
+	res.render("layouts/main", {
+		data: {table:"department", attributeData:Department.attributeData},
+		renderBody: "department/parsing.ejs",
+		renderEnd: "department/parsingjs.ejs"
+	});
+});
+
 module.exports = router;

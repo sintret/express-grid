@@ -1,0 +1,51 @@
+<script>
+	var attributeData = <%- JSON.stringify(data.attributeData) %>;
+	var jsFilter = "";
+	$("#jsGrid").jsGrid({
+		width: "100%",
+		filtering: true,
+		inserting: false,
+		editing: true,
+		sorting: true,
+		autoload: true,
+		paging: true,
+		pageLoading: true,
+		css: "kv-grid-table table table-bordered table-striped kv-table-wrap",
+		pageSize: $("#pageSize").val(),
+		pageButtonCount: 10,
+		deleteConfirm: "Do you really want to delete client?",
+			controller: {
+				loadData: function (filter) {
+					return $.ajax({
+						datatype: "json",
+						type: "GET",
+						url: "/chat/list",
+						data: filter,
+						success: function (html) {
+							var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = "Showing <b>"; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");jsFilter = filter;
+						}
+					});
+				},
+				updateItem: function (item) {return $.ajax({type: "PUT",url: "/chat",data: item});},
+				deleteItem: function (item) {return $.ajax({type: "DELETE",url: "/chat",data: item});}
+			},
+			fields: [
+				{name : "message", title : attributeData.message, type: "text", width: 90},
+				{name : "from", title : attributeData.from, type: "text", width: 90},
+				{name : "to", title : attributeData.to, type: "text", width: 90},
+				{name : "updatedAt", title : attributeData.updatedAt, type: "text", width: 90},
+				{type: "control", width: 100, editButton: false,
+				itemTemplate: function (value, item) {
+					var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+					var $customViewButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class='glyphicon glyphicon-eye-open'></span>").click(function (e) {location.href = "/chat/view/" + item.id; e.stopPropagation();});
+					var $customEditButton = $("<button>").attr({class: "btn btn-success btn-xs"}).html("<span class='glyphicon glyphicon-pencil'></span>").click(function (e) {location.href = "/chat/update/" + item.id; e.stopPropagation();});
+					var $customDeleteButton = $("<button>").attr({class: "btn btn-danger btn-xs"}).html("<span class='glyphicon glyphicon-trash'></span>").click(function (e) { if(window.confirm("delete selected data ?")){$.ajax({url:"/chat/"+item.id,type:"DELETE",data:{id:item.id},success:function(data){location.href="";}});};e.stopPropagation();});
+					return $("<div>").append($customViewButton).append("   ").append($customEditButton).append("    ").append($customDeleteButton);
+					}
+				}
+			]
+		});
+
+	$(".export-xls").on("click", function () {location.href="/chat/excel?"+jQuery.param(jsFilter);});
+	$("#pageSize").on("change", function () {$("#jsGrid").jsGrid("option", "pageSize", $(this).val());});
+</script>

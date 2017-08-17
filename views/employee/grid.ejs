@@ -1,5 +1,6 @@
 <script>
 	var attributeData = <%- JSON.stringify(data.attributeData) %>;
+	var jsFilter = "";
 	$("#jsGrid").jsGrid({
 		width: "100%",
 		filtering: true,
@@ -10,7 +11,7 @@
 		paging: true,
 		pageLoading: true,
 		css: "kv-grid-table table table-bordered table-striped kv-table-wrap",
-		pageSize: 20,
+		pageSize: $("#pageSize").val(),
 		pageButtonCount: 10,
 		deleteConfirm: "Do you really want to delete client?",
 			controller: {
@@ -21,7 +22,7 @@
 						url: "/employee/list",
 						data: filter,
 						success: function (html) {
-							var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = "Showing <b>"; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");
+							var pi = filter.pageIndex || pageIndex; var ps = filter.pageSize || pageSize; var showing = "Showing <b>"; var pis = (pi * ps);var i = ((pi-1) * ps) +1;showing += i+" - "+pis;showing += "</b> of " + html.itemsCount;$(".summary").html(showing);$(".jsgrid-pager-container").addClass("paginaton");jsFilter = filter;
 						}
 					});
 				},
@@ -121,4 +122,7 @@
 				}
 			]
 		});
+
+	$(".export-xls").on("click", function () {location.href="/employee/excel?"+jQuery.param(jsFilter);});
+	$("#pageSize").on("change", function () {$("#jsGrid").jsGrid("option", "pageSize", $(this).val());});
 </script>

@@ -113,4 +113,12 @@ router.get('/excel', function (req, res, next) {
 		workbook.xlsx.writeFile(filePath + fileName).then(function () {res.download(filePath + fileName);});
 	}).catch(function (err) {res.json(err);});
 });
+router.get('/parsing', function (req, res, next) {
+	res.render("layouts/main", {
+		data: {table:"factories", attributeData:Factories.attributeData},
+		renderBody: "factories/parsing.ejs",
+		renderEnd: "factories/parsingjs.ejs"
+	});
+});
+
 module.exports = router;

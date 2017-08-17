@@ -215,14 +215,14 @@ var Generator = function (arr, table, dirRoot) {
     this.outputViewsIndex = function () {
 
         var out = '';
-        out += '<nav class="breadcrumb pull-right">' + this.newLine;
+        out += '<nav class="breadcrumb pull-right boxy-small">' + this.newLine;
         out += this.tab + '<a class="breadcrumb-item" href="/">Home</a> /' + this.newLine;
         out += this.tab + '<span class="breadcrumb-item active">Index</span>' + this.newLine;
         out += '</nav>' + this.newLine + this.newLine;
         out += '<div class="page-header">' + this.newLine;
         out += this.tab + "<h1><%= title %></h1>" + this.newLine;
         out += "</div>" + this.newLine + this.newLine;
-        out += '<div class="panel panel-info">' + this.newLine;
+        out += '<div class="panel panel-info boxy">' + this.newLine;
         out += this.tab + '<div class="panel-heading">' + this.newLine;
         out += this.tab + this.tab + '<div class="pull-right">' + this.newLine;
         out += this.tab + this.tab + this.tab + '<div class="summary">Showing <b>1-100</b> of <b>21,387</b> items.</div>' + this.newLine;
@@ -321,7 +321,7 @@ var Generator = function (arr, table, dirRoot) {
 
         var keys = this.keys();
         var out = '';
-        out += '<nav class="breadcrumb pull-right">' + this.newLine;
+        out += '<nav class="breadcrumb pull-right boxy-small">' + this.newLine;
         out += this.tab + '<a class="breadcrumb-item" href="/">Home</a> /' + this.newLine;
         out += this.tab + '<a class="breadcrumb-item" href="/' + table + '">Index</a> /' + this.newLine;
         out += this.tab + '<span class="breadcrumb-item active">View</span>' + this.newLine;
@@ -331,7 +331,7 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + "<h1>" + this.capitalizeFirstLetter(table) + " <%= data.model.id %> </h1>" + this.newLine;
         out += "</div>" + this.newLine + this.newLine;
 
-        out += '<table class="table table-striped table-responsive">' + this.newLine;
+        out += '<table class="table table-striped table-responsive boxy">' + this.newLine;
         out += this.tab + '<tbody>' + this.newLine;
 
         for (var i = 0; i < keys.length; i++) {
@@ -352,7 +352,7 @@ var Generator = function (arr, table, dirRoot) {
 
     this.outputViewsCreate = function () {
         var out = '';
-        out += '<nav class="breadcrumb pull-right">' + this.newLine;
+        out += '<nav class="breadcrumb pull-right boxy-small">' + this.newLine;
         out += this.tab + '<a class="breadcrumb-item" href="/">Home</a> /' + this.newLine;
         out += this.tab + '<a class="breadcrumb-item" href="/' + table + '">Index</a> /' + this.newLine;
         out += this.tab + '<span class="breadcrumb-item active">Create Form</span>' + this.newLine;
@@ -369,7 +369,7 @@ var Generator = function (arr, table, dirRoot) {
 
     this.outputViewsUpdate = function () {
         var out = '';
-        out += '<nav class="breadcrumb pull-right">' + this.newLine;
+        out += '<nav class="breadcrumb pull-right boxy-small">' + this.newLine;
         out += this.tab + '<a class="breadcrumb-item" href="/">Home</a> /' + this.newLine;
         out += this.tab + '<a class="breadcrumb-item" href="/' + table + '">Index</a> /' + this.newLine;
         out += this.tab + '<span class="breadcrumb-item active">Update Form</span>' + this.newLine;
@@ -389,7 +389,7 @@ var Generator = function (arr, table, dirRoot) {
         var keys = this.keys();
 
         var out = '';
-        out += '<form id="'+table+'-form" method="post" action="/' + table + '/create" >' + this.newLine;
+        out += '<form id="'+table+'-form" method="post" action="/' + table + '/create"  class="boxy">' + this.newLine;
 
         var dataFields = this.dataFields();
 
@@ -472,7 +472,7 @@ var Generator = function (arr, table, dirRoot) {
 
     this.outputViewsParsing = function () {
         var out = '';
-        out += '<nav class="breadcrumb pull-right">' + this.newLine;
+        out += '<nav class="breadcrumb pull-right boxy-small">' + this.newLine;
         out += this.tab + '<a class="breadcrumb-item" href="/">Home</a> /' + this.newLine;
         out += this.tab + '<a class="breadcrumb-item" href="/' + table + '">Index</a> /' + this.newLine;
         out += this.tab + '<span class="breadcrumb-item active">Parsing Form</span>' + this.newLine;
@@ -482,8 +482,8 @@ var Generator = function (arr, table, dirRoot) {
         out += this.tab + "<h3>Import / Upload Data using excel file</h3>" + this.newLine;
         out += "</div>" + this.newLine + this.newLine;
 
-        out +='<form id="bank-form"> \
-            <div class="row"> \
+        out +='<form id="bank-form" class="boxy"> \
+            <p>&nbsp;</p><p>&nbsp;</p><div class="row"> \
             <div class="col-md-10"> \
             <div class="form-group"> \
             <label class="control-label col-md-2" for="type">Type</label> \
@@ -503,7 +503,7 @@ var Generator = function (arr, table, dirRoot) {
             <p>&nbsp;</p> \
         <div class="row"> \
             <div class="col-md-10 col-md-offset-1"> \
-            <button type="submit" class="btn btn-success">Upload</button> \
+            <button type="submit" class="btn btn-success">Upload</button> <p>&nbsp;</p><p>&nbsp;</p> \
             </div> \
             </div> \
             </form> \

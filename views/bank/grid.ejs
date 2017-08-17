@@ -1,11 +1,6 @@
 <script>
 	var attributeData = <%- JSON.stringify(data.attributeData) %>;
 	var jsFilter = "";
-	var MyCustomDirectLoadStrategy = function(grid) {
-		$("#pageSize").on("change", function () {
-			grid.refresh();
-		});
-	};
 	$("#jsGrid").jsGrid({
 		width: "100%",
 		filtering: true,
@@ -53,7 +48,7 @@
 					var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
 					var $customViewButton = $("<button>").attr({class: "btn btn-info btn-xs"}).html("<span class='glyphicon glyphicon-eye-open'></span>").click(function (e) {location.href = "/bank/view/" + item.id; e.stopPropagation();});
 					var $customEditButton = $("<button>").attr({class: "btn btn-success btn-xs"}).html("<span class='glyphicon glyphicon-pencil'></span>").click(function (e) {location.href = "/bank/update/" + item.id; e.stopPropagation();});
-					var $customDeleteButton = $("<button>").attr({class: "btn btn-danger btn-xs"}).html("<span class='glyphicon glyphicon-trash'></span>").click(function (e) { if(window.confirm("delete selected data ?")){$.ajax({url:"/bank/"+item.id,type:"DELETE",data:{id:item.id},success:function(data){location.href="";}});};e.stopPropagation();});
+					var $customDeleteButton = $("<button>").attr({class: "btn btn-danger btn-xs"}).html("<span class='glyphicon glyphicon-trash'></span>").click(function (e) { if(window.confirm("delete selected data ?")){$.ajax({url:"/bank/"+item.id,type:"DELETE",data:{id:item.id},success:function(data){$(this).find(".jsgrid-table").closest("tr").focus();}});};e.stopPropagation();});
 					return $("<div>").append($customViewButton).append("   ").append($customEditButton).append("    ").append($customDeleteButton);
 					}
 				}

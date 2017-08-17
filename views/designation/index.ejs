@@ -1,4 +1,4 @@
-<nav class="breadcrumb pull-right">
+<nav class="breadcrumb pull-right boxy-small">
 	<a class="breadcrumb-item" href="/">Home</a> /
 	<span class="breadcrumb-item active">Index</span>
 </nav>
@@ -7,7 +7,7 @@
 	<h1><%= title %></h1>
 </div>
 
-<div class="panel panel-info">
+<div class="panel panel-info boxy">
 	<div class="panel-heading">
 		<div class="pull-right">
 			<div class="summary">Showing <b>1-100</b> of <b>21,387</b> items.</div>
@@ -23,6 +23,11 @@
 				<a type="button" class="btn btn-warning" href="/designation/parsing" title="Import Excel"><i class="fa fa-file-excel-o"></i></a>
 				<a type="button" id="backupExcel" href="/designation/excel" class="btn btn-default" title="Excel Backup"><i class="fa fa-download"></i></a>
 				<a class="btn btn-default" href="/designation" title="Refresh Grid" ><i class="glyphicon glyphicon-repeat"></i></a></div>
+			<div class="btn-group"><select id="pageSize" class="form-control"><option selected value="50">50</option><option value="100">100</option><option value="300">300</option> </select> </div>
+			<div class="btn-group">
+			<button id="w9" class="btn btn-default dropdown-toggle" title="Export" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-share-square-o"></i>  <span class="caret"></span></button>
+			<ul id="w10" class="dropdown-menu dropdown-menu-right"><li role="presentation" class="dropdown-header">Export Page Data</li><li title="Microsoft Excel 95+"><a class="export-xls" href="#" ><i class="text-success fa fa-file-excel-o"></i> Excel</a></li><li title="Portable Document Format"><a class="export-pdf" href="#"><i class="text-danger fa fa-file-pdf-o"></i> PDF</a></li></ul>
+			</div>
 			</div>
 		</div>
 		<div style="padding-top: 7px;"><em>* Exports &amp; Imports Excel Format</em></div>

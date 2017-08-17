@@ -91,8 +91,8 @@ router.get('/excel', function (req, res, next) {
 	worksheet.getCell('A1').value = '#';
 
 	Bank.getGridFilter(req.query).then(function (items) {
-		var models = items.data;
 
+		var models = items.data;
 		for (var i = 0; i < fields.length; i++) {
 			var j = i + 1;
 			worksheet.getCell(sequence[j] + '1').value = Util.capitalizeFirstLetter(fields[i]);
@@ -113,12 +113,11 @@ router.get('/excel', function (req, res, next) {
 		workbook.xlsx.writeFile(filePath + fileName).then(function () {res.download(filePath + fileName);});
 	}).catch(function (err) {res.json(err);});
 });
-
 router.get('/parsing', function (req, res, next) {
 	res.render("layouts/main", {
-		data: {model:Bank.newEmpty, attributeData: Bank.attributeData},
+		data: {table:"bank", attributeData:Bank.attributeData},
 		renderBody: "bank/parsing.ejs",
-		renderEnd:"bank/parsingjs.ejs"
+		renderEnd: "bank/parsingjs.ejs"
 	});
 });
 

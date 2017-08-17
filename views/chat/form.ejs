@@ -1,0 +1,25 @@
+<form id="chat-form" method="post" action="/chat/create"  class="boxy">
+	<div class="form-group divmessage">
+		<label for="message"><%= data.attributeData.message %></label>
+		<input type="text" class="form-control" id="message" name="message" placeholder="Message" value="<%= data.model.message%>">
+	</div>
+	<div class="form-group divfrom">
+		<label for="from"><%= data.attributeData.from %></label>
+		<select class="form-control" name="from" id="from">
+			<option value=""> -- </option>
+		</select>
+	</div>
+	<div class="form-group divto">
+		<label for="to"><%= data.attributeData.to %></label>
+		<select class="form-control" name="to" id="to">
+			<option value=""> -- </option>
+		</select>
+	</div>
+	<div class="form-group divupdatedAt">
+		<label for="updatedAt"><%= data.attributeData.updatedAt %></label>
+		<input type="date" class="form-control" id="updatedAt" name="updatedAt" placeholder="UpdatedAt" value="<%= data.model.updatedAt%>">
+	</div>
+ <div class="form-group"><button id="chat-submit" type="submit" class="btn btn-success">Submit</button></div>
+</form>
+
+<% include formjs.ejs %>
