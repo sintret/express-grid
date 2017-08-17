@@ -93,6 +93,20 @@ router.post('/', function (req, res, next) {
                         return console.log(g.outputViewsFormjs());
                     }
                 });
+
+                var parsing = dirViews + "/parsing.ejs";
+                fs.writeFile(parsing, g.outputViewsParsing(), function (err) {
+                    if (err) {
+                        return console.log(g.outputViewsParsing());
+                    }
+                });
+
+                var parsingjs = dirViews + "/parsingjs.ejs";
+                fs.writeFile(parsingjs, g.outputViewsParsingJS(), function (err) {
+                    if (err) {
+                        return console.log(g.outputViewsParsingJS());
+                    }
+                });
             }
         })
 

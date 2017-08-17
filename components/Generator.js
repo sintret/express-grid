@@ -196,6 +196,17 @@ var Generator = function (arr, table, dirRoot) {
         out +=  this.tab + "}).catch(function (err) {res.json(err);});" +this.newLine;
         out +=  "});" +this.newLine;
 
+
+        //parsing controller
+        out += "router.get('/parsing', function (req, res, next) {" + this.newLine;
+        out += this.tab + 'res.render("layouts/main", {' + this.newLine;
+        out += this.tab + this.tab + 'data: {table:"' + table + '", attributeData:' + this.capitalizeFirstLetter(table) + '.attributeData},' + this.newLine;
+        out += this.tab + this.tab + 'renderBody: "' + table + '/parsing.ejs",' + this.newLine;
+        out += this.tab + this.tab + 'renderEnd: "' + table + '/parsingjs.ejs"' + this.newLine;
+        out += this.tab + '});' + this.newLine;
+        out += '});' + this.newLine+ this.newLine;
+
+
         out += "module.exports = router;" + this.newLine;
 
         return out;
@@ -457,7 +468,65 @@ var Generator = function (arr, table, dirRoot) {
         out += '</script>';
 
         return out;
+    }
 
+    this.outputViewsParsing = function () {
+        var out = '';
+        out += '<nav class="breadcrumb pull-right">' + this.newLine;
+        out += this.tab + '<a class="breadcrumb-item" href="/">Home</a> /' + this.newLine;
+        out += this.tab + '<a class="breadcrumb-item" href="/' + table + '">Index</a> /' + this.newLine;
+        out += this.tab + '<span class="breadcrumb-item active">Parsing Form</span>' + this.newLine;
+        out += '</nav>' + this.newLine + this.newLine;
+
+        out += '<div class="page-header">' + this.newLine;
+        out += this.tab + "<h3>Import / Upload Data using excel file</h3>" + this.newLine;
+        out += "</div>" + this.newLine + this.newLine;
+
+        out +='<form id="bank-form"> \
+            <div class="row"> \
+            <div class="col-md-10"> \
+            <div class="form-group"> \
+            <label class="control-label col-md-2" for="type">Type</label> \
+            <div class="col-md-10"><select id="type" class="form-control" aria-invalid="false"> \
+            <option value="1" data-note="add">Add Data</option> \
+        <option value="2" data-note="edit">Edit Data</option> \
+        </select> \
+        </div> \
+        </div> \
+        <p>&nbsp;</p> \
+        <div class="form-group"> \
+            <label class="control-label col-md-2" for="file">Your Excel</label> \
+        <div class="col-md-10"><input type="file" id="file" class="form-control"></div> \
+            </div> \
+            </div> \
+            </div> \
+            <p>&nbsp;</p> \
+        <div class="row"> \
+            <div class="col-md-10 col-md-offset-1"> \
+            <button type="submit" class="btn btn-success">Upload</button> \
+            </div> \
+            </div> \
+            </form> \
+            <hr> \
+            <div class="row"> \
+            <div class="col-md-10"> \
+            Format Sample : <a id="sample-parsing" href="/bank/excel?sample-type=1">sample-add.xls</a> \
+            </div> \
+            </div>';
+
+
+
+        return out;
+    }
+
+    this.outputViewsParsingJS = function () {
+        var out = '';
+        out += '<script>' + this.newLine;
+        out += this.tab + '$("#type").on("change", function () {' + this.newLine;
+        out += this.tab + '$("#sample-parsing").attr("href","/bank/excel?sample-type="+$(this).val()).html("sample-"+$("#type option:selected").attr("data-note")+".xls");' + this.newLine;
+        out += this.tab + '});' + this.newLine;
+        out += '</script>';
+        return out;
     }
 
     this.attributeData = function () {

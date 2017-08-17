@@ -1,0 +1,5 @@
+<script>
+	$("#type").on("change", function () {
+	$("#sample-parsing").attr("href","/bank/excel?sample-type="+$(this).val()).html("sample-"+$("#type option:selected").attr("data-note")+".xls");
+	});
+</script>

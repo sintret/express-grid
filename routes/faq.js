@@ -83,26 +83,16 @@ router.post('/update/:id', function (req, res, next) {
 router.get('/excel', function (req, res, next) {
 
 	var workbook = new Excel.Workbook();
-	var worksheet = workbook.addWorksheet('Faq', {pageSetup: {paperSize: 9, orientation: 'landscape',fitToHeight: 5, fitToWidth: 7}});
+	var worksheet = workbook.addWorksheet('Faq', {pageSetup: {paperSize: 9, orientation: 'landscape'}});
 	var sequence = Util.excelSequence();
 	var fields = Faq.keys;
 	var start = 3, num = 1;
 
 	worksheet.getCell('A1').value = '#';
-	worksheet.getRow(1).fill = {
-		type: 'pattern',
-		pattern:'solid',
-		fgColor:{argb:'07C'}
-	};
-	worksheet.getRow(1).font = {
-		name: 'Calibri',
-		color: { argb: 'FFFFFF' },
-		family: 2,
-		size: 13
-	};
 
-	Faq.findAll().then(function (models) {
+	Faq.getGridFilter(req.query).then(function (items) {
 
+		var models = items.data;
 		for (var i = 0; i < fields.length; i++) {
 			var j = i + 1;
 			worksheet.getCell(sequence[j] + '1').value = Util.capitalizeFirstLetter(fields[i]);
@@ -123,4 +113,12 @@ router.get('/excel', function (req, res, next) {
 		workbook.xlsx.writeFile(filePath + fileName).then(function () {res.download(filePath + fileName);});
 	}).catch(function (err) {res.json(err);});
 });
+router.get('/parsing', function (req, res, next) {
+	res.render("layouts/main", {
+		data: {table:"faq", attributeData:Faq.attributeData},
+		renderBody: "faq/parsing.ejs",
+		renderEnd: "faq/parsingjs.ejs"
+	});
+});
+
 module.exports = router;
